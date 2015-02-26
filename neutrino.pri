@@ -2,9 +2,18 @@ TARGET = ../Neutrino
 
 CONFIG += qt qwt debug_and_release windows
 
+## -- folder definitions -- used also by files including this one
+UIs_DIR = $$PWD/UIs
+SRC_DIR = $$PWD/src
+PANS_DIR = $$PWD/src/pans
+GRAPH_DIR = $$PWD/src/graphics
+
+NPHYS_DIR = $$PWD/nPhysImage
+
 #CONFIG += neutrino-HDF
 
-QT += svg xml network core gui
+QT += svg xml network core gui printsupport widgets
+DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x000000
 
 QMAKE_LIBDIR_FLAGS = -L../ -L../nPhysImage
 
@@ -161,36 +170,36 @@ INCLUDEPATH += ../src/pans/winlist
 DEPENDPATH += ../src/pans/winlist
 
 
-FORMS += neutrino.ui nSbarra.ui
-FORMS += nLine.ui nObject.ui nPoint.ui
+FORMS += $$UIs_DIR/neutrino.ui $$UIs_DIR/nSbarra.ui
+FORMS += $$UIs_DIR/nLine.ui $$UIs_DIR/nObject.ui $$UIs_DIR/nPoint.ui
 
 # external colormaps
-SOURCES += neutrinoPalettes.cc
+SOURCES += $$SRC_DIR/neutrinoPalettes.cc
 
 DEPENDPATH += ../nPhysImage
-HEADERS += config.h
+HEADERS += $$NPHYS_DIR/config.h
 
-HEADERS += nGenericPan.h  neutrino.h 
-SOURCES += nGenericPan.cc neutrino.cc
+HEADERS += $$SRC_DIR/nGenericPan.h  $$SRC_DIR/neutrino.h 
+SOURCES += $$SRC_DIR/nGenericPan.cc $$SRC_DIR/neutrino.cc
 
-HEADERS += nView.h 
-SOURCES += nView.cc
+HEADERS += $$SRC_DIR/nView.h 
+SOURCES += $$SRC_DIR/nView.cc
 
-HEADERS += nPlug.h 
-SOURCES += nPlug.cc
+HEADERS += $$SRC_DIR/nPlug.h 
+SOURCES += $$SRC_DIR/nPlug.cc
 
-FORMS += nColorBarWin.ui
-HEADERS += nColorBarWin.h  nHistogram.h
-SOURCES += nColorBarWin.cc nHistogram.cc
+FORMS += $$UIs_DIR/nColorBarWin.ui
+HEADERS += $$PANS_DIR/colorbar/nColorBarWin.h  $$PANS_DIR/colorbar/nHistogram.h
+SOURCES += $$PANS_DIR/colorbar/nColorBarWin.cc $$PANS_DIR/colorbar/nHistogram.cc
 
-FORMS += nPhysProperties.ui
-HEADERS += nPhysProperties.h 
-SOURCES += nPhysProperties.cc
+FORMS += $$UIs_DIR/nPhysProperties.ui
+HEADERS += $$PANS_DIR/nPhysProperties.h 
+SOURCES += $$PANS_DIR/nPhysProperties.cc
 
 
 # base app
-HEADERS += nApp.h
+HEADERS += $$SRC_DIR/nApp.h
 macx {
 	# osx app
-	HEADERS += osxApp.h
+	HEADERS += $$SRC_DIR/osxApp.h
 }

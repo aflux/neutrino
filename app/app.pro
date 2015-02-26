@@ -2,7 +2,7 @@ include (../neutrino.pri)
 
 TEMPLATE = app
 
-SOURCES += main.cc
+SOURCES += $$SRC_DIR/main.cc
 win32 {
 	LIBS += -L../lib -lNeutrino1
 } else {

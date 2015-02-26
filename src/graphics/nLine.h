@@ -24,6 +24,7 @@
  */
 #include <QtGui>
 #include <QClipboard>
+#include <QGraphicsObject>
 #include "ui_nLine.h"
 
 #ifndef __nLine

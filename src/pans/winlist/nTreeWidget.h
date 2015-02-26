@@ -27,6 +27,7 @@
 #include <QtGui>
 #include <QWidget>
 #include <QObject>
+#include <QTreeWidget>
 
 #ifndef __nTreeWidget_h
 #define __nTreeWidget_h

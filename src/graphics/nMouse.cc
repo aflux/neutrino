@@ -22,8 +22,10 @@
  *	Tommaso Vinci <tommaso.vinci@polytechnique.edu>
  *
  */
+
 #include "nMouse.h"
 #include "neutrino.h"
+
 
 nMouse::nMouse(neutrino *neu) : QGraphicsItem()
 {

@@ -7,127 +7,128 @@ MOC_DIR = ../build
 RCC_DIR = ../build
 UI_DIR = ../build
 
+
 ## padellume
-FORMS += nOpenRAW.ui
-HEADERS += nOpenRAW.h
-SOURCES += nOpenRAW.cc
+FORMS += $$UIs_DIR/nOpenRAW.ui
+HEADERS += $$PANS_DIR/nOpenRAW.h
+SOURCES += $$PANS_DIR/nOpenRAW.cc
 
 
-SOURCES += nLine.cc nRect.cc nEllipse.cc nPoint.cc
-HEADERS += nLine.h  nRect.h  nEllipse.h  nPoint.h
-HEADERS += nMouse.h  nTics.h
-SOURCES += nMouse.cc nTics.cc
+SOURCES += $$GRAPH_DIR/nLine.cc $$GRAPH_DIR/nRect.cc $$GRAPH_DIR/nEllipse.cc $$GRAPH_DIR/nPoint.cc
+HEADERS += $$GRAPH_DIR/nLine.h  $$GRAPH_DIR/nRect.h  $$GRAPH_DIR/nEllipse.h  $$GRAPH_DIR/nPoint.h
+HEADERS += $$GRAPH_DIR/nMouse.h  $$GRAPH_DIR/nTics.h
+SOURCES += $$GRAPH_DIR/nMouse.cc $$GRAPH_DIR/nTics.cc
 
 
-FORMS += nMouseInfo.ui
-HEADERS += nMouseInfo.h 
-SOURCES += nMouseInfo.cc
+FORMS += $$UIs_DIR/nMouseInfo.ui
+HEADERS += $$PANS_DIR/nMouseInfo.h 
+SOURCES += $$PANS_DIR/nMouseInfo.cc
 
-HEADERS += nWinList.h  nTreeWidget.h
-SOURCES += nWinList.cc nTreeWidget.cc
-FORMS += nWinList.ui
+HEADERS += $$PANS_DIR/winlist/nWinList.h  $$PANS_DIR/winlist/nTreeWidget.h
+SOURCES += $$PANS_DIR/winlist/nWinList.cc $$PANS_DIR/winlist/nTreeWidget.cc
+FORMS += $$UIs_DIR/nWinList.ui
 
 
 ## focal spot
-HEADERS += nFocalSpot.h
-SOURCES += nFocalSpot.cc
-FORMS += nFocalSpot.ui
+HEADERS += $$PANS_DIR/nFocalSpot.h
+SOURCES += $$PANS_DIR/nFocalSpot.cc
+FORMS += $$UIs_DIR/nFocalSpot.ui
 
 ## lineout
-HEADERS += nLineout.h  nLineoutBoth.h
-SOURCES += nLineout.cc nLineoutBoth.cc
-FORMS += nLineout.ui nLineoutBoth.ui 
+HEADERS += $$PANS_DIR/nLineout.h  $$PANS_DIR/nLineoutBoth.h
+SOURCES += $$PANS_DIR/nLineout.cc $$PANS_DIR/nLineoutBoth.cc
+FORMS += $$UIs_DIR/nLineout.ui $$UIs_DIR/nLineoutBoth.ui 
 
 ## operators +-*/
-HEADERS += nOperator.h
-SOURCES += nOperator.cc
-FORMS += nOperator.ui
+HEADERS += $$PANS_DIR/nOperator.h
+SOURCES += $$PANS_DIR/nOperator.cc
+FORMS += $$UIs_DIR/nOperator.ui
 
 ## cutoff mask
-HEADERS += nCutoffMask.h
-SOURCES += nCutoffMask.cc
-FORMS += nCutoffMask.ui
+HEADERS += $$PANS_DIR/nCutoffMask.h
+SOURCES += $$PANS_DIR/nCutoffMask.cc
+FORMS += $$UIs_DIR/nCutoffMask.ui
 
 ## rotation
-HEADERS += nRotate.h
-SOURCES += nRotate.cc
-FORMS += nRotate.ui
+HEADERS += $$PANS_DIR/nRotate.h
+SOURCES += $$PANS_DIR/nRotate.cc
+FORMS += $$UIs_DIR/nRotate.ui
 
 ## Affine
-HEADERS += nAffine.h
-SOURCES += nAffine.cc
-FORMS += nAffine.ui
+HEADERS += $$PANS_DIR/nAffine.h
+SOURCES += $$PANS_DIR/nAffine.cc
+FORMS += $$UIs_DIR/nAffine.ui
 
 ## Blur
-HEADERS += nBlur.h
-SOURCES += nBlur.cc
-FORMS += nBlur.ui
+HEADERS += $$PANS_DIR/nBlur.h
+SOURCES += $$PANS_DIR/nBlur.cc
+FORMS += $$UIs_DIR/nBlur.ui
 
 #HDF stuff 
 neutrino-HDF {
-	FORMS += nHDF5.ui
-	SOURCES += nHDF5.cc
-	HEADERS += nHDF5.h 
+	FORMS += $$UIs_DIR/nHDF5.ui
+	SOURCES += $$PANS_DIR/nHDF5.cc
+	HEADERS += $$PANS_DIR/nHDF5.h 
 } 
 
 #Box Lineout
-FORMS += nBoxLineout.ui
-SOURCES += nBoxLineout.cc
-HEADERS += nBoxLineout.h 
+FORMS += $$UIs_DIR/nBoxLineout.ui
+SOURCES += $$PANS_DIR/nBoxLineout.cc
+HEADERS += $$PANS_DIR/nBoxLineout.h 
 
 #Find peaks
-FORMS += nFindPeaks.ui
-SOURCES += nFindPeaks.cc
-HEADERS += nFindPeaks.h 
+FORMS += $$UIs_DIR/nFindPeaks.ui
+SOURCES += $$PANS_DIR/nFindPeaks.cc
+HEADERS += $$PANS_DIR/nFindPeaks.h 
 
 #VISAR
-FORMS += nVISAR1.ui nVISAR2.ui  nVISAR3.ui 
-SOURCES += nVisar.cc nVisarZoomer.cc
-HEADERS += nVisar.h  nVisarZoomer.h 
+FORMS += $$UIs_DIR/nVISAR1.ui $$UIs_DIR/nVISAR2.ui  $$UIs_DIR/nVISAR3.ui 
+SOURCES += $$PANS_DIR/VISAR/nVisar.cc $$PANS_DIR/VISAR/nVisarZoomer.cc
+HEADERS += $$PANS_DIR/VISAR/nVisar.h  $$PANS_DIR/VISAR/nVisarZoomer.h 
 
 # Wavelet
-FORMS += nWavelet.ui
-SOURCES += nWavelet.cc
-HEADERS += nWavelet.h 
+FORMS += $$UIs_DIR/nWavelet.ui
+SOURCES += $$PANS_DIR/nWavelet.cc
+HEADERS += $$PANS_DIR/nWavelet.h 
 
 # Spectral Analysis
-FORMS += nSpectralAnalysis.ui
-SOURCES += nSpectralAnalysis.cc
-HEADERS += nSpectralAnalysis.h
+FORMS += $$UIs_DIR/nSpectralAnalysis.ui
+SOURCES += $$PANS_DIR/nSpectralAnalysis.cc
+HEADERS += $$PANS_DIR/nSpectralAnalysis.h
 
 # Inversions
-FORMS += nIntegralInversion.ui
-SOURCES += nIntegralInversion.cc
-HEADERS += nIntegralInversion.h 
+FORMS += $$UIs_DIR/nIntegralInversion.ui
+SOURCES += $$PANS_DIR/nIntegralInversion.cc
+HEADERS += $$PANS_DIR/nIntegralInversion.h 
 
 # Monitor directory
-FORMS += nMonitor.ui
-SOURCES += nMonitor.cc
-HEADERS += nMonitor.h 
+FORMS += $$UIs_DIR/nMonitor.ui
+SOURCES += $$PANS_DIR/nMonitor.cc
+HEADERS += $$PANS_DIR/nMonitor.h 
 
 # RegionPath
-FORMS += nRegionPath.ui
-SOURCES += nRegionPath.cc
-HEADERS += nRegionPath.h 
+FORMS += $$UIs_DIR/nRegionPath.ui
+SOURCES += $$PANS_DIR/nRegionPath.cc
+HEADERS += $$PANS_DIR/nRegionPath.h 
 
 # Preferences Panel
-FORMS += nPreferences.ui
-SOURCES += nPreferences.cc
-HEADERS += nPreferences.h 
+FORMS += $$UIs_DIR/nPreferences.ui
+SOURCES += $$PANS_DIR/nPreferences.cc
+HEADERS += $$PANS_DIR/nPreferences.h 
 
 # Preferences Panel
-FORMS += nCompareLines.ui
-SOURCES += nCompareLines.cc
-HEADERS += nCompareLines.h 
+FORMS += $$UIs_DIR/nCompareLines.ui
+SOURCES += $$PANS_DIR/nCompareLines.cc
+HEADERS += $$PANS_DIR/nCompareLines.h 
  
 # Shortcuts
-FORMS += nShortcuts.ui
-SOURCES += nShortcuts.cc
-HEADERS += nShortcuts.h 
+FORMS += $$UIs_DIR/nShortcuts.ui
+SOURCES += $$PANS_DIR/nShortcuts.cc
+HEADERS += $$PANS_DIR/nShortcuts.h 
 
 #Find peaks
-FORMS += nGhost.ui
-SOURCES += nGhost.cc
-HEADERS += nGhost.h 
+FORMS += $$UIs_DIR/nGhost.ui
+SOURCES += $$PANS_DIR/nGhost.cc
+HEADERS += $$PANS_DIR/nGhost.h 
 
 

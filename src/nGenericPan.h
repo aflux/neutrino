@@ -24,6 +24,12 @@
  */
 #include <QtGui>
 #include <QWidget>
+
+#include <QGraphicsScene>
+#include <QComboBox>
+#include <QGestureEvent>
+#include <QMainWindow>
+
 #include <iostream>
 #include "nPhysImageF.h"
 

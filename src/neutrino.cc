@@ -23,6 +23,7 @@
  *
  */
 #include <QtSvg>
+#include <QPrintDialog>
 
 #include "neutrino.h"
 #include "nMouseInfo.h"
@@ -2098,10 +2099,11 @@ nGenericPan* neutrino::openPan(QString panName) {
     nGenericPan *my_pan=NULL;
     
     const QMetaObject* metaObject = this->metaObject();
+
     for(int i = metaObject->methodOffset(); i < metaObject->methodCount(); ++i) {
         if (!strcmp(metaObject->method(i).typeName(),"nGenericPan*") && 
             metaObject->method(i).parameterTypes().empty() &&
-            QString::fromLatin1(metaObject->method(i).signature())==panName+"()") {
+            QString::fromLatin1(metaObject->method(i).methodSignature())==panName+"()") {
             QMetaObject::invokeMethod(this,panName.toLatin1().constData(),Q_RETURN_ARG(nGenericPan*, my_pan));
         }
     }
