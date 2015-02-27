@@ -42,6 +42,7 @@ PRE_TARGETDEPS = nPhys
 
 CONFIG(debug, debug|release) {
     DEFINES += __phys_debug=10
+    QMAKE_CXXFLAGS += -ggdb
     message("DEBUG!")
 } else {
     DEFINES += QT_NO_DEBUG_OUTPUT
@@ -82,8 +83,9 @@ macx {
 
 
 unix:!macx {
-	INCLUDEPATH += /usr/include/qwt
-	LIBS += -lqwt
+	#INCLUDEPATH += /usr/include/qwt
+	INCLUDEPATH += $$PWD/ext/include
+	LIBS += -L $$PWD/ext/lib -lqwt
 
     neutrino.path = /usr/local/bin
 	neutrino.files = neutrino
