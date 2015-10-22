@@ -1406,7 +1406,6 @@ nPhysImageF<T>::sub(size_t x, size_t y, size_t Dx, size_t Dy) {
 }
 
 
-
 template<class T> void
 nPhysImageF<T>::TscanBrightness() {
 	if (width*height>0) {
@@ -1447,6 +1446,9 @@ nPhysImageF<T>::TscanBrightness() {
 		DEBUG(5,"[brightness scan] "<<Tminimum_value<<" -- "<<Tmaximum_value);
 	}
 }
+
+// specialized method, see nPhysImageF.cc
+template<> inline void nPhysImageF<mcomplex>::TscanBrightness();
 
 // -----------------------------------------------------------  fft
 //
@@ -1787,9 +1789,12 @@ nPhysImageF<T>::writeASC(const char *ofilename) {
 // specializzazione per classe complex
 template<> inline int
 nPhysImageF<mcomplex>::writeASC(const char *ofilename) {
-	std::ofstream r_ofile((std::string(ofilename)+".re").c_str());
-	std::ofstream i_ofile((std::string(ofilename)+".im").c_str());	
+	std::ofstream r_ofile((std::string(ofilename)+".re.txt").c_str());
+	std::ofstream i_ofile((std::string(ofilename)+".im.txt").c_str());	
+	DEBUG(10, "mcomplex writeASC");
 	if (r_ofile.good() && i_ofile.good()) {
+
+		DEBUG(10, "outputting complex "<<width<<"x"<<height<<" complex file");
 
 		for (register size_t i=0; i<height; i++) {
 			for (register size_t j=0; j<width; j++) {

@@ -27,3 +27,7 @@
 // complex<double> -> double: a plain overload of the double(complex) cast operator would
 // be a source of errors. I prefer to specialize the sync_round method
 
+
+template<> void
+nPhysImageF<mcomplex>::TscanBrightness()
+{ }
