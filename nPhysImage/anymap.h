@@ -85,7 +85,7 @@ public:
 
 	operator std::string() const {
 		if (ddescr == any_none) {
-			DEBUG("accessing uninitialized value");
+			DEBUG(5,"accessing uninitialized value");
 		}
 		return get_str();
 	}

@@ -255,7 +255,7 @@ void unwrap_goldstein (nPhysD *phase, nPhysD *soln) {
 									active_list[num_active++] = vec2(ii,jj);
 									if (num_active > max_active) {
 										num_active = max_active;
-										DEBUG("here2 " << ii << " " << jj << " i,j " << i << " " << j);
+										DEBUG(10, "here2 " << ii << " " << jj << " i,j " << i << " " << j);
 									}
 									bits.set(ii,jj,bit | ACTIVE);
 									PlaceCut(&bits, ii, jj, boxctr_i, boxctr_j);

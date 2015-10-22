@@ -65,12 +65,26 @@ public:
 
 	inline double mod()
 	{ return sqrt(re*re+im*im); }
+	inline void mod(double v)
+	{ // set mod
+		double o_arg = arg();
+		re = v*cos(o_arg);
+		im = v*sin(o_arg);
+
+	}
 
 	inline double arg()
 	{ return atan2(im, re); }
+	inline void arg(double v)
+	{ // set arg
+		double o_mod = mod();
+		re = o_mod*cos(v);
+		im = o_mod*sin(v);
+	}
 
 	void operator= (mcomplex oth)
 	{ re = oth.real(); im = oth.imag(); }
+
 
 	// wallerazz
 	mcomplex operator/ (double val)
@@ -80,6 +94,8 @@ public:
 	{ return mcomplex(re+oth.real(), im+oth.imag()); }
 	mcomplex operator- (mcomplex oth)
 	{ return mcomplex(re-oth.real(), im-oth.imag()); }
+	mcomplex operator* (double val)
+	{ return mcomplex(re*val, im*val); }
 	mcomplex operator* (mcomplex oth)
 	{ return mcomplex(re*oth.real()-im*oth.imag(), im*oth.real()+re*oth.imag()); }
 	mcomplex operator/ (mcomplex oth)

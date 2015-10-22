@@ -435,7 +435,9 @@ public:
 		for (register size_t j=0; j<getH(); j++) {
 			for (register size_t i=0; i<getW(); i++) {
 				bidimvec<int> p=bidimvec<double>(i,j)-offset;
-				padded->set(i+offset.x(),j+offset.y(),getPoint(i,j,def_value));
+				// .alex. getPoint not necessary here...
+				//padded->set(i+offset.x(),j+offset.y(),getPoint(i,j,def_value));
+				padded->set(i+offset.x(),j+offset.y(),point(i,j,def_value));
 			}
 		}
 		return padded;
@@ -1075,7 +1077,7 @@ nPhysImageF<T>::~nPhysImageF()
 
 	int trashDelete=_trash_delete();
 	if ( trashDelete == 0 ) {
-        DEBUG(1,"["<<(void *)this<<"] "<<  getShortName() << " : " << getName() << " ALLOWING DELETE! " );
+        DEBUG(3,"["<<(void *)this<<"] "<<  getShortName() << " : " << getName() << " ALLOWING DELETE! " );
 		if (Timg_buffer != NULL)
 			delete Timg_buffer;
 		
@@ -1101,7 +1103,7 @@ nPhysImageF<T>::~nPhysImageF()
 		delete _n_inst; // FIXME alex: check this
 		// end tom
 	} else {
-        DEBUG(1,"["<<(void *)this<<"] "<<  getShortName() << " : " << getName() << " NOT ALLOWING DELETE! " << trashDelete );
+        DEBUG(3,"["<<(void *)this<<"] "<<  getShortName() << " : " << getName() << " NOT ALLOWING DELETE! " << trashDelete );
 	}
 
 }
@@ -1167,7 +1169,7 @@ nPhysImageF<T>::_init_temp_pointers()
 template<class T> void
 nPhysImageF<T>::matrix_points_aligned()
 {
-	DEBUG(1,"allocate "<<width<<"x"<<height << " name: "<<getName() << " short: " << getShortName() << " from: " << getFromName());
+	DEBUG(3,"allocate "<<width<<"x"<<height << " name: "<<getName() << " short: " << getShortName() << " from: " << getFromName());
 
 	// check for other sessions
 	if (! _canResize())
@@ -1789,8 +1791,8 @@ nPhysImageF<T>::writeASC(const char *ofilename) {
 // specializzazione per classe complex
 template<> inline int
 nPhysImageF<mcomplex>::writeASC(const char *ofilename) {
-	std::ofstream r_ofile((std::string(ofilename)+".re.txt").c_str());
-	std::ofstream i_ofile((std::string(ofilename)+".im.txt").c_str());	
+	std::ofstream r_ofile((std::string(ofilename)+".mod.txt").c_str());
+	std::ofstream i_ofile((std::string(ofilename)+".phase.txt").c_str());	
 	DEBUG(10, "mcomplex writeASC");
 	if (r_ofile.good() && i_ofile.good()) {
 
@@ -1798,8 +1800,8 @@ nPhysImageF<mcomplex>::writeASC(const char *ofilename) {
 
 		for (register size_t i=0; i<height; i++) {
 			for (register size_t j=0; j<width; j++) {
-				r_ofile<<std::setprecision(8)<<Timg_buffer[j+i*width].real()<<"\t";
-				i_ofile<<std::setprecision(8)<<Timg_buffer[j+i*width].imag()<<"\t";
+				r_ofile<<std::setprecision(8)<<Timg_buffer[j+i*width].mod()<<"\t";
+				i_ofile<<std::setprecision(8)<<Timg_buffer[j+i*width].arg()<<"\t";
 			}
 			r_ofile<<"\n";
 			i_ofile<<"\n";
@@ -1924,8 +1926,6 @@ nPhysImageF<T>::operator* (const nPhysImageF<T> &other) const {
 		
 	return(new_img);
 }
-
-
 
 
 template<class T> nPhysImageF<T>
