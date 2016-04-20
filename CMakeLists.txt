@@ -32,6 +32,7 @@ endif()
 
 add_compile_options(-std=c++11)
 add_compile_options(-Wall)
+
 if (!WIN32)
     add_compile_options(-fPIC)
 endif()

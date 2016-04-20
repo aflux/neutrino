@@ -570,8 +570,8 @@ public:
 // 		return sobo;
 // 	}
 
-    // for simplicity we store it in an int whihc represents the power.
-    // correspondence between int/power
+    // for simplicity we store it in an int which represents the power.
+    // correspondence between int/power:
     // {neg,-1/(neg-2)} {-3,1/5} {-2,1/4} {-1,1/3} {0,1/2} {1,1} {2,2} {3,3} ...
     double gamma() {
         if (!property.have("gamma")) {

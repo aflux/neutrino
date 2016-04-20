@@ -25,8 +25,6 @@
 #include "nVisar.h"
 #include "nVisarZoomer.h"
 #include "neutrino.h"
-#include "fftw3.h"
-#include <QColor>
 
 #include <qwt_scale_engine.h>
 #include <qwt_curve_fitter.h>
@@ -88,11 +86,9 @@ nVisar::nVisar(neutrino *nparent, QString winname)
     
 	my_w.sopPlot->setAxisTitle(QwtPlot::yLeft, tr("Counts [red]"));
 	my_w.sopPlot->setAxisTitle(QwtPlot::yRight, tr("Temperature [blue]"));
-//	my_w.sopPlot->setAxisTitle(QwtPlot::xTop, tr("Shock Velocity"));
     
 	(qobject_cast<QFrame*> (my_w.sopPlot->canvas()))->setLineWidth(0);
     my_w.sopPlot->enableAxis(QwtPlot::yRight);
-//    my_w.sopPlot->enableAxis(QwtPlot::xTop);
 
 	my_w.sopPlot->setAxisAutoScale(QwtPlot::xBottom);
 	my_w.sopPlot->setAxisAutoScale(QwtPlot::yLeft);

@@ -61,10 +61,6 @@ public:
 	
 	void export_pdf();
 	
-	// fun stuff
-
-	void sceneChanged();
-
 private:
 	QwtPlotCurve lineout;	
 	QwtPlotMarker xMarker, rxMarker;

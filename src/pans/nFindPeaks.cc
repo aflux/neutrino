@@ -88,7 +88,7 @@ nFindPeaks::nFindPeaks(neutrino *nparent, QString winname)
 	decorate();
 	loadDefaults();
 	connect(nparent, SIGNAL(bufferChanged(nPhysD *)), this, SLOT(updatePlot()));
-	connect(box, SIGNAL(sceneChanged()), this, SLOT(sceneChanged()));
+    connect(box, SIGNAL(sceneChanged()), this, SLOT(updatePlot()));
  	connect(my_w.direction, SIGNAL(currentIndexChanged(int)), this, SLOT(updatePlot()));
  	connect(my_w.param, SIGNAL(valueChanged(double)), this, SLOT(updatePlot()));
 	updatePlot();
@@ -133,10 +133,6 @@ void nFindPeaks::setScale() {
 	}
 }
 
-void nFindPeaks::sceneChanged() {
-	if (sender()==box) updatePlot();
-}
-
 void nFindPeaks::mouseAtMatrix(QPointF p) {
 	if (currentBuffer) {
 		QPen marker_pen;
@@ -155,6 +151,7 @@ void nFindPeaks::mouseAtMatrix(QPointF p) {
 
 void nFindPeaks::updatePlot() {
 	if (currentBuffer && isVisible()) {
+        saveDefaults();
         QRect geom2=box->getRect(currentBuffer);
 		if (geom2.isEmpty()) {
 			my_w.statusBar->showMessage(tr("Attention: the region is outside the image!"),2000);
@@ -259,7 +256,7 @@ void nFindPeaks::updatePlot() {
 			gsl_fit_linear (&xd[0], 1, &yd[0], 1, k, &c0, &c1, &cov00, &cov01, &cov11, &sumsq);
 			my_w.statusBar->showMessage(QString::number(cutoff)+" c00:"+QString::number(cov00)+" c01:"+QString::number(cov01)+" c11:"+QString::number(cov11)+" sq:"+QString::number(sqrt(sumsq)/k));
 			my_w.origin->setText(QString::number(c0));
-			my_w.scale->setText(QString::number(2*c1));
+            my_w.scale->setText(QString::number(c1));
 		}
 		
 		my_w.plot->setAxisScale(lineout.xAxis(),lineout.minXValue(),lineout.maxXValue(),0);
