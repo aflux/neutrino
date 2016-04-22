@@ -46,8 +46,8 @@ class nLineout : public nGenericPan {
 	Q_OBJECT
 public:
 	nLineout(neutrino *, QString, enum phys_direction);
-	
-	public slots:
+
+public slots:
 	void updatePlot(QPointF);
 	
 	void toggle_zoom();
@@ -60,8 +60,7 @@ public:
 
     void setBehaviour();
 
-public slots:
-	void getMinMax();
+    void getMinMax();
 	void setMinMax(QPointF);
 	
 private:

@@ -31,23 +31,21 @@
 #include "nGenericPan.h"
 #include "ui_nLineoutBoth.h"
 
+#include "qcustomplot.h"
+
 class nLineoutBoth : public nGenericPan {
 	Q_OBJECT
 public:
 	nLineoutBoth(neutrino *, QString);
 	
-	public slots:
-	void updatePlot(QPointF);
-
-    void setBehaviour();
-	
-//	void nZoom(double);
-	
 public slots:
+	void updatePlot(QPointF);
+    void setBehaviour();
 	void updateLastPoint();
     
 private:
 	Ui::nLineoutBoth my_w;
+    QPointer<QCPItemLine> my_cursor[2];
 };
 
 #endif

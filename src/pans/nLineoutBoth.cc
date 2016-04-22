@@ -47,11 +47,17 @@ nLineoutBoth::nLineoutBoth(neutrino *parent, QString win_name)
     my_w.plot->addGraph(my_w.plot->yAxis, my_w.plot->xAxis2);
     my_w.plot->graph(1)->setPen(QPen(Qt::red));
 
+    my_cursor[0]=new QCPItemLine(my_w.plot);
+    my_cursor[1]=new QCPItemLine(my_w.plot);
+
     my_w.plot->xAxis2->setVisible(true);
     my_w.plot->yAxis2->setVisible(true);
 
     my_w.plot->xAxis->setTickLabelFont(nparent->my_w.my_view->font());
     my_w.plot->yAxis->setTickLabelFont(nparent->my_w.my_view->font());
+    my_w.plot->yAxis->setRangeReversed(true);
+
+
     my_w.plot->xAxis2->setTickLabelFont(nparent->my_w.my_view->font());
     my_w.plot->yAxis2->setTickLabelFont(nparent->my_w.my_view->font());
 
@@ -105,10 +111,14 @@ void nLineoutBoth::updatePlot(QPointF p) {
                 for (int i=0;i<z_size;i++){
                     y[i]=currentBuffer->point(i+lat_skip,b_p[(k+1)%2]);
                 }
+                my_cursor[k]->start->setCoords( p.x(), QCPRange::minRange);
+                my_cursor[k]->end->setCoords( p.x(), QCPRange::maxRange);
             } else {
                 for (int i=0;i<z_size;i++){
                     y[i]=currentBuffer->point(b_p[(k+1)%2],i+lat_skip);
                 }
+                my_cursor[k]->start->setCoords(QCPRange::minRange, p.y());
+                my_cursor[k]->end->setCoords(QCPRange::maxRange, p.y());
             }
             my_w.plot->graph(k)->setData(x,y);
             my_w.plot->graph(k)->setData(x,y);
