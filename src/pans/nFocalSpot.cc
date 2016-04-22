@@ -63,8 +63,8 @@ nFocalSpot::calculate_stats()
 		phys_fast_gaussian_blur(decimated, 10);
 		decimated.TscanBrightness();
 	
-		centr = vec2(decimated.max_Tv_x, decimated.max_Tv_y);
-		cur->set_origin(centr);
+        centr = decimated.max_Tv;
+        cur->set_origin(centr);
 	} else
 		centr = cur->get_origin();
 

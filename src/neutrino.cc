@@ -605,7 +605,9 @@ void neutrino::updateRecentFileActions(QString fname)
 
 void neutrino::setGamma(int value) {
     if (currentBuffer) {
+        DEBUG("here");
         currentBuffer->property["gamma"]=value;
+        DEBUG("here");
         createQimage();
         setProperty("gamma",value);
         emitBufferChanged();
@@ -1064,10 +1066,14 @@ neutrino::showPhys(nPhysD* datamatrix) {
         if (currentBuffer) {
             if (my_w.actionLockColors->isChecked()) {
                 datamatrix->property["display_range"]=currentBuffer->property["display_range"];
+                DEBUG("here");
                 datamatrix->property["gamma"]=currentBuffer->property["gamma"];
+                DEBUG("here");
             } else {
                 if (!datamatrix->property.have("gamma")) {
+                    DEBUG("here");
                     datamatrix->property["gamma"]=property("gamma").toInt();
+                    DEBUG("here");
                 }
             }
         }
@@ -1255,11 +1261,19 @@ void neutrino::keyPressEvent (QKeyEvent *e)
         my_w.my_view->zoomEq();
         break;
     case Qt::Key_A: {
-        if (currentBuffer) {
-            currentBuffer->property["display_range"]=currentBuffer->get_min_max();
-            currentBuffer->property["gamma"]=1;
-            createQimage();
-            emit updatecolorbar();
+        if (e->modifiers() & Qt::ShiftModifier) {
+            foreach (nPhysD* phys, physList) {
+                currentBuffer->property["display_range"]=currentBuffer->get_min_max();
+                setGamma(1);
+                emit bufferChanged(phys);
+            }
+        } else {
+            if (currentBuffer) {
+                currentBuffer->property["display_range"]=currentBuffer->get_min_max();
+                setGamma(1);
+                createQimage();
+                emit updatecolorbar();
+            }
         }
         break;
     }
@@ -2117,7 +2131,7 @@ void neutrino::loadDefaults(){
 
     setProperty("fileExport", my_set.value("fileExport", "Untitled.pdf"));
     setProperty("fileOpen", my_set.value("fileOpen",""));
-    setProperty("gamma", my_set.value("gamma",0));
+    setProperty("gamma", my_set.value("gamma",1));
 
     my_set.endGroup();
 }

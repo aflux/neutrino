@@ -605,10 +605,10 @@ phys_fast_gaussian_blur(nPhysD &image, double radiusX, double radiusY)
         for (size_t i = 0 ; i < image.getW()/2+1 ; i++) {
             double blur=exp(-((i*i)/sx+(j-image.getH()/2)*(j-image.getH()/2)/sy))/image.getSurf();
             int k=i+((j+image.getH()/2+1)%image.getH())*(image.getW()/2+1);
-			b2[k][0]*=blur;
-			b2[k][1]*=blur;
-		}
-	}
+            b2[k][0]*=blur;
+            b2[k][1]*=blur;
+        }
+    }
     fftw_execute(bb);
 
 #pragma omp parallel for
