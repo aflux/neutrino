@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>364</width>
-    <height>362</height>
+    <width>393</width>
+    <height>371</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,7 +23,7 @@
    <bool>true</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <property name="leftMargin">
      <number>0</number>
     </property>
@@ -36,7 +36,10 @@
     <property name="bottomMargin">
      <number>0</number>
     </property>
-    <item row="2" column="4">
+    <item>
+     <widget class="QCustomPlot" name="plot" native="true"/>
+    </item>
+    <item>
      <widget class="QToolButton" name="lockColors">
       <property name="focusPolicy">
        <enum>Qt::NoFocus</enum>
@@ -45,7 +48,7 @@
        <string>...</string>
       </property>
       <property name="icon">
-       <iconset resource="../resources/icons/icons.qrc">
+       <iconset resource="../../neutrino-build/src/icons.qrc">
         <normaloff>:/icons/lockColor.png</normaloff>:/icons/lockColor.png</iconset>
       </property>
       <property name="iconSize">
@@ -59,8 +62,8 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="5">
-     <widget class="QToolButton" name="autoscale">
+    <item>
+     <widget class="QToolButton" name="autoScale">
       <property name="focusPolicy">
        <enum>Qt::NoFocus</enum>
       </property>
@@ -68,7 +71,7 @@
        <string>...</string>
       </property>
       <property name="icon">
-       <iconset resource="../resources/icons/icons.qrc">
+       <iconset resource="../../neutrino-build/src/icons.qrc">
         <normaloff>:/icons/lockOpen.png</normaloff>
         <normalon>:/icons/lockClose.png</normalon>:/icons/lockOpen.png</iconset>
       </property>
@@ -83,17 +86,7 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="0" colspan="3">
-     <widget class="QwtPlot" name="plot">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="3">
+    <item>
      <widget class="QToolButton" name="lockClick">
       <property name="focusPolicy">
        <enum>Qt::NoFocus</enum>
@@ -102,7 +95,7 @@
        <string>...</string>
       </property>
       <property name="icon">
-       <iconset resource="../resources/icons/icons.qrc">
+       <iconset resource="../../neutrino-build/src/icons.qrc">
         <normaloff>:/icons/autoRefresh.png</normaloff>
         <normalon>:/icons/noAutoRefresh.png</normalon>:/icons/autoRefresh.png</iconset>
       </property>
@@ -129,14 +122,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QwtPlot</class>
-   <extends>QFrame</extends>
-   <header>qwt_plot.h</header>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../resources/icons/icons.qrc"/>
+  <include location="../../neutrino-build/src/icons.qrc"/>
  </resources>
  <connections/>
 </ui>

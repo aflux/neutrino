@@ -28,11 +28,6 @@
 #include <QtGui>
 #include <QWidget>
 
-#include <qwt_plot.h>
-#include <qwt_plot_curve.h>
-#include <qwt_series_data.h>
-#include <qwt_plot_marker.h>
-
 #include "nGenericPan.h"
 #include "ui_nLineoutBoth.h"
 
@@ -49,14 +44,10 @@ public:
 //	void nZoom(double);
 	
 public slots:
-    void rescale(QPointF);
 	void updateLastPoint();
     
 private:
 	Ui::nLineoutBoth my_w;
-	
-	QwtPlotCurve curve[2];
-	QwtPlotMarker marker, markerRuler;
 };
 
 #endif
