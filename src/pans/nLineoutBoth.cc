@@ -43,9 +43,9 @@ nLineoutBoth::nLineoutBoth(neutrino *parent, QString win_name)
     setBehaviour();
 
     my_w.plot->addGraph(my_w.plot->xAxis, my_w.plot->yAxis2);
-    my_w.plot->graph(0)->setPen(QPen(Qt::blue));
+    my_w.plot->graph(0)->setPen(QPen(Qt::red));
     my_w.plot->addGraph(my_w.plot->yAxis, my_w.plot->xAxis2);
-    my_w.plot->graph(1)->setPen(QPen(Qt::red));
+    my_w.plot->graph(1)->setPen(QPen(Qt::blue));
 
     my_cursor[0]=new QCPItemLine(my_w.plot);
     my_cursor[1]=new QCPItemLine(my_w.plot);
@@ -53,20 +53,34 @@ nLineoutBoth::nLineoutBoth(neutrino *parent, QString win_name)
     my_w.plot->xAxis2->setVisible(true);
     my_w.plot->yAxis2->setVisible(true);
 
-    my_w.plot->xAxis->setTickLabelFont(nparent->my_w.my_view->font());
-    my_w.plot->yAxis->setTickLabelFont(nparent->my_w.my_view->font());
     my_w.plot->yAxis->setRangeReversed(true);
 
 
+    my_w.plot->xAxis->setTickLabelFont(nparent->my_w.my_view->font());
+    my_w.plot->yAxis->setTickLabelFont(nparent->my_w.my_view->font());
     my_w.plot->xAxis2->setTickLabelFont(nparent->my_w.my_view->font());
     my_w.plot->yAxis2->setTickLabelFont(nparent->my_w.my_view->font());
 
-//    my_w.plot->axisRect()->setRangeDragAxes(my_w.plot->xAxis2,my_w.plot->yAxis2);
-//    my_w.plot->axisRect()->setRangeZoomAxes(my_w.plot->xAxis2,my_w.plot->yAxis2);
+    my_w.plot->xAxis->setLabel(tr("X (red)"));
+    my_w.plot->xAxis->setLabelColor(Qt::red);
+    my_w.plot->xAxis->setTickLabelColor(Qt::red);
+    my_w.plot->yAxis2->setLabel(tr("X value (blue)"));
+    my_w.plot->yAxis2->setLabelColor(Qt::red);
+    my_w.plot->yAxis2->setTickLabelColor(Qt::red);
+    my_w.plot->yAxis->setLabel(tr("Y (blue)"));
+    my_w.plot->yAxis->setLabelColor(Qt::blue);
+    my_w.plot->yAxis->setTickLabelColor(Qt::blue);
+    my_w.plot->xAxis2->setLabel(tr("Y value (blue)"));
+    my_w.plot->xAxis2->setLabelColor(Qt::blue);
+    my_w.plot->xAxis2->setTickLabelColor(Qt::blue);
 
-    my_w.plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectAxes | QCP::iSelectLegend | QCP::iSelectPlottables | QCP::iMultiSelect | QCP::iSelectItems | QCP::iSelectOther);
 
-    //    setTickLabelFont
+    my_w.plot->xAxis->setLabelFont(nparent->my_w.my_view->font());
+    my_w.plot->yAxis->setLabelFont(nparent->my_w.my_view->font());
+    my_w.plot->xAxis2->setLabelFont(nparent->my_w.my_view->font());
+    my_w.plot->yAxis2->setLabelFont(nparent->my_w.my_view->font());
+
+//    my_w.plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectAxes | QCP::iSelectLegend | QCP::iSelectPlottables | QCP::iMultiSelect | QCP::iSelectItems | QCP::iSelectOther);
 
 	decorate();
 	updateLastPoint();

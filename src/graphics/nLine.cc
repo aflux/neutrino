@@ -327,6 +327,7 @@ void nLine::updatePlot () {
         if (my_w.plot->graphCount()==0) {
             my_w.plot->addGraph(my_w.plot->xAxis, my_w.plot->yAxis);
             my_w.plot->graph(0)->setPen(QPen(Qt::blue));
+            my_w.plot->xAxis->setLabel(tr("distance"));
         }
 
 		double colore;
