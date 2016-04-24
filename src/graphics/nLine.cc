@@ -25,9 +25,6 @@
 #include "nLine.h"
 #include "neutrino.h"
 #include <iostream>
-#include <qwt_plot.h>
-#include <qwt_plot_curve.h>
-#include <qwt_plot_marker.h>
 
 #include <spline.h>
 
@@ -123,12 +120,6 @@ nLine::nLine(neutrino *nparent) : QGraphicsObject()
 	connect(my_w.cutPoints, SIGNAL(valueChanged(int)), this, SLOT(setNumPoints(int)));
 
 	connect(my_w.tabWidget, SIGNAL(currentChanged(int)), this, SLOT(updatePlot()));
-
-	lineOut = new QwtPlotCurve(tr("line Cut"));
-    lineOut->attach(my_w.my_qwt);
-
-	lineOut->setXAxis(QwtPlot::xBottom);
-	lineOut->setYAxis(QwtPlot::yLeft);
 
 }
 
@@ -331,9 +322,16 @@ void nLine::copy_clip()
 }
 
 void nLine::updatePlot () {
-	if (my_w.my_qwt->isVisible() && parent()->currentBuffer) {
+    if (my_w.plot->isVisible() && parent()->currentBuffer) {
+
+        if (my_w.plot->graphCount()==0) {
+            my_w.plot->addGraph(my_w.plot->xAxis, my_w.plot->yAxis);
+            my_w.plot->graph(0)->setPen(QPen(Qt::blue));
+        }
+
 		double colore;
-		QVector<QPointF> toPlot;
+        QVector<double> toPlotx;
+        QVector<double> toPloty;
 
 		nPhysD *mat=parent()->currentBuffer;
 
@@ -346,10 +344,8 @@ void nLine::updatePlot () {
 
 		QPolygonF my_poly=poly(numPoints);
 
-		foreach (QwtPlotMarker *mark, marker) {
-			mark->detach();
-		}
-		marker.clear();
+        int retval=my_w.plot->clearItems();
+        DEBUG(retval);
 
 		QPen penna;
 		penna.setColor(ref[0]->brush().color());
@@ -365,13 +361,16 @@ void nLine::updatePlot () {
 			} else {
 				colore=mat->point((int)(p.x()+orig.x()),(int)(p.y()+orig.y()));
 			}
-			if (std::isfinite(colore)) toPlot << QPointF(dist, colore);
-			if (my_points.contains(p) && nSizeHolder>0.0) {
-				QwtPlotMarker *mark=new QwtPlotMarker();
-				mark->setLineStyle(QwtPlotMarker::VLine);
-				mark->setLinePen(penna);
-				mark->setXValue(dist);
-				marker << mark;
+            if (std::isfinite(colore)) {
+                toPlotx << dist;
+                toPloty << colore;
+            }
+            if (my_points.contains(p) && nSizeHolder>0.0) {
+                QCPItemLine *marker=new QCPItemLine(my_w.plot);
+                marker->start->setCoords(dist, QCPRange::minRange);
+                marker->end->setCoords(dist, QCPRange::maxRange);
+                marker->setPen(penna);
+                my_w.plot->addItem(marker);
 			}
 			dist+=sqrt(pow((my_poly.at(i+1)-my_poly.at(i)).x(),2)+pow((my_poly.at(i+1)-my_poly.at(i)).y(),2));
 		}
@@ -380,24 +379,18 @@ void nLine::updatePlot () {
 		} else {
 			colore=mat->point((int)(my_poly.last().x()+orig.x()),(int)(my_poly.last().y()+orig.y()));
 		}
-		if (std::isfinite(colore)) toPlot << QPointF(dist, colore);
+        if (std::isfinite(colore)) {
+            toPlotx << dist;
+            toPloty << colore;
+        }
 
-		if (nSizeHolder>0.0) {
-			QwtPlotMarker *mark=new QwtPlotMarker();
-			mark->setLineStyle(QwtPlotMarker::VLine);
-			mark->setLinePen(penna);
-			mark->setXValue(dist);
-			marker << mark;
-			foreach(QwtPlotMarker *mark, marker) {
-				mark->attach(my_w.my_qwt);
-			}
-		}
+        my_w.plot->xAxis->setTickLabelFont(parent()->my_w.my_view->font());
+        my_w.plot->yAxis->setTickLabelFont(parent()->my_w.my_view->font());
 
-		lineOut->setSamples(toPlot);
-		my_w.my_qwt->setAxisScale(lineOut->xAxis(),lineOut->minXValue(),lineOut->maxXValue(),0);
-		my_w.my_qwt->setAxisScale(lineOut->yAxis(),lineOut->minYValue(),lineOut->maxYValue(),0);
-		my_w.my_qwt->replot();
-	}
+        my_w.plot->graph(0)->setData(toPlotx,toPloty);
+        my_w.plot->rescaleAxes();
+        my_w.plot->replot();
+    }
 
 }
 
@@ -637,7 +630,8 @@ void nLine::removePoint(int np) {
 			if (ref.size()==1) {
 				deleteLater();
 			}
-		}
+            itemChanged();
+        }
 	}
     nodeSelected=-1;
 }

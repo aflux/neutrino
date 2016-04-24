@@ -358,7 +358,6 @@ neutrino::neutrino():
 
 #ifdef  __phys_debug
     if (numwin==1)	recentFileActs.first()->trigger();
-    bothLineout();
 #endif
 
 

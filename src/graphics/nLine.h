@@ -30,11 +30,9 @@
 #include <QGraphicsObject>
 #include "nPhysImageF.h"
 #include "ui_nLine.h"
+#include "qcustomplot.h"
 
 class neutrino;
-class QwtPlot;
-class QwtPlotCurve;
-class QwtPlotMarker;
 
 class nLine : public QGraphicsObject {
  Q_OBJECT
@@ -97,10 +95,6 @@ public:
 	
 	void selectThis(bool);
 	
-	QwtPlot *my_qwt;
-	QwtPlotCurve *lineOut;
-	QList<QwtPlotMarker*> marker;
-
 public slots:
 	
 	void interactive();

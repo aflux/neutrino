@@ -61,6 +61,11 @@ nLineoutBoth::nLineoutBoth(neutrino *parent, QString win_name)
     my_w.plot->xAxis2->setTickLabelFont(nparent->my_w.my_view->font());
     my_w.plot->yAxis2->setTickLabelFont(nparent->my_w.my_view->font());
 
+//    my_w.plot->axisRect()->setRangeDragAxes(my_w.plot->xAxis2,my_w.plot->yAxis2);
+//    my_w.plot->axisRect()->setRangeZoomAxes(my_w.plot->xAxis2,my_w.plot->yAxis2);
+
+    my_w.plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectAxes | QCP::iSelectLegend | QCP::iSelectPlottables | QCP::iMultiSelect | QCP::iSelectItems | QCP::iSelectOther);
+
     //    setTickLabelFont
 
 	decorate();
