@@ -71,7 +71,7 @@ list (APPEND SOURCES
     graphics/nLine.cc graphics/nTics.cc graphics/nPoint.cc graphics/nEllipse.cc 
     graphics/spline.cc graphics/qcustomplot.cpp
     panThread.cc nPlug.cc pans/nFocalSpot.cc pans/nPhysProperties.cc  
-    pans/VISAR/nVisarZoomer.cc pans/VISAR/nVisar.cc pans/nFindPeaks.cc 
+    pans/nVisar.cc pans/nFindPeaks.cc
     pans/nInterpolatePath.cc pans/nOpenRAW.cc pans/nSpectralAnalysis.cc
     pans/colorbar/nHistogram.cc pans/colorbar/nColorBarWin.cc pans/nInterferometry.cc 
     pans/nGhost.cc pans/nMouseInfo.cc pans/nBoxLineout.cc pans/nPreferences.cc 
@@ -166,7 +166,7 @@ elseif (USE_QT4)
 endif()
 
 # sub-structure (wrong: we should probably replicate CMakeLists.txt in every subfolder)
-include_directories(graphics doc pans pans/VISAR pans/colorbar pans/winlist)
+include_directories(graphics doc pans pans/colorbar pans/winlist)
 
 
 message(STATUS "Adding qrcs: ${RES_SOURCES}")
