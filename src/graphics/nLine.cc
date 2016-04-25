@@ -345,8 +345,7 @@ void nLine::updatePlot () {
 
 		QPolygonF my_poly=poly(numPoints);
 
-        int retval=my_w.plot->clearItems();
-        DEBUG(retval);
+        my_w.plot->clearItems();
 
 		QPen penna;
 		penna.setColor(ref[0]->brush().color());

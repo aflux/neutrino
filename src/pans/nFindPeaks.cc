@@ -208,8 +208,7 @@ void nFindPeaks::updatePlot() {
         }
         fftw_execute(planC2R2);
 		
-        int retval=my_w.plot->clearItems();
-        DEBUG(retval);
+        my_w.plot->clearItems();
 
         vector<double> fitx;
         vector<double> fity;
@@ -231,10 +230,6 @@ void nFindPeaks::updatePlot() {
                 fity.push_back(posx);
                 k++;
             }
-        }
-
-        for(int i=0;i<fitx.size();i++) {
-            DEBUG(i << ":" << fitx[i] << " " << fity[i]);
         }
 
         if (fitx.size()>2) {

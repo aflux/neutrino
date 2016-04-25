@@ -122,18 +122,18 @@ void nLineoutBoth::updatePlot(QPointF p) {
             phys_get_vec_brightness(dvec+lat_skip, z_size, vmin, vmax);
 
             QVector<double> x(z_size);
-            for (int i=0;i<z_size;i++){
+            for (unsigned int i=0;i<z_size;i++){
                 x[i]=i+lat_skip;
             }
             QVector<double> y(z_size);
             if (k==0) {
-                for (int i=0;i<z_size;i++){
+                for (unsigned int i=0;i<z_size;i++){
                     y[i]=currentBuffer->point(i+lat_skip,b_p[(k+1)%2]);
                 }
                 my_cursor[k]->start->setCoords( p.x(), QCPRange::minRange);
                 my_cursor[k]->end->setCoords( p.x(), QCPRange::maxRange);
             } else {
-                for (int i=0;i<z_size;i++){
+                for (unsigned int i=0;i<z_size;i++){
                     y[i]=currentBuffer->point(b_p[(k+1)%2],i+lat_skip);
                 }
                 my_cursor[k]->start->setCoords(QCPRange::minRange, p.y());
