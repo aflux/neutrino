@@ -358,7 +358,7 @@ neutrino::neutrino():
 
 #ifdef  __phys_debug
     if (numwin==1)	recentFileActs.first()->trigger();
-    FindPeaks();
+    CompareLines();
 #endif
 
 

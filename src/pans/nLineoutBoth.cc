@@ -140,7 +140,6 @@ void nLineoutBoth::updatePlot(QPointF p) {
                 my_cursor[k]->end->setCoords(QCPRange::maxRange, p.y());
             }
             my_w.plot->graph(k)->setData(x,y);
-            my_w.plot->graph(k)->setData(x,y);
 
             my_w.plot->graph(k)->keyAxis()->setRange(lat_skip, lat_skip+z_size);
 

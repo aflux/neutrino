@@ -23,17 +23,7 @@
  *
  */
 #include "nCompareLines.h"
-
-#include <qwt_plot_zoomer.h>
-#include <qwt_plot_panner.h>
-#include <qwt_plot_renderer.h>
-//#include <qwt_legend.h>
-//#if QWT_VERSION < 0x060100
-//#include <qwt_legend_item.h>
-//#else
-//#include <qwt_legend_label.h>
-//#endif
-
+#include "qcustomplot.h"
 
 nCompareLines::nCompareLines(neutrino *nparent, QString winname)
 : nGenericPan(nparent, winname)
@@ -63,18 +53,14 @@ nCompareLines::nCompareLines(neutrino *nparent, QString winname)
 	connect(nparent, SIGNAL(physDel(nPhysD*)), this, SLOT(physDel(nPhysD*)));
 	connect(nparent, SIGNAL(physMod(std::pair<nPhysD*,nPhysD*>)), this, SLOT(physMod(std::pair<nPhysD*,nPhysD*>)));
     
-    
-	my_w.plot->setAxisTitle(QwtPlot::xBottom, tr("Distance"));
-	my_w.plot->setAxisTitle(QwtPlot::yLeft, tr("Value"));
-	my_w.plot->enableAxis(QwtPlot::xBottom);
-	my_w.plot->enableAxis(QwtPlot::yLeft);
-	(qobject_cast<QFrame*> (my_w.plot->canvas()))->setLineWidth(0);
-
-//	QwtLegend *legend = new QwtLegend;
-//!TODO: check this: it is not compatible with qwt6.1.0
-//    legend->setItemMode(QwtLegend::CheckableItem);
-//    my_w.plot->insertLegend(legend, QwtPlot::ExternalLegend);
-//    my_w.plot->insertLegend(legend);
+    my_w.plot->xAxis->setTickLabelFont(nparent->my_w.my_view->font());
+    my_w.plot->yAxis->setTickLabelFont(nparent->my_w.my_view->font());
+    my_w.plot->xAxis->setLabelFont(nparent->my_w.my_view->font());
+    my_w.plot->yAxis->setLabelFont(nparent->my_w.my_view->font());
+    my_w.plot->xAxis->setLabel(tr("Distance"));
+    my_w.plot->yAxis->setLabel(tr("Value"));
+//    my_w.plot->legend->setVisible(true);
+    my_w.plot->legend->setFont(nparent->my_w.my_view->font());
 	
 	decorate();
 	loadDefaults();
@@ -85,12 +71,14 @@ nCompareLines::nCompareLines(neutrino *nparent, QString winname)
 
 
 void nCompareLines::physDel(nPhysD* my_phys) {
-    images.removeAll(my_phys);    
+    images.removeAll(my_phys);
+    updatePlot();
 }
 
 void nCompareLines::physMod(std::pair<nPhysD*,nPhysD*> my_mod) {
     images.removeAll(my_mod.first);    
     images.append(my_mod.second);        
+    updatePlot();
 }
 
 void nCompareLines::addImage() {
@@ -109,13 +97,9 @@ void nCompareLines::sceneChanged() {
 
 void nCompareLines::updatePlot() {
 	if (currentBuffer && isVisible()) {
-		foreach (QwtPlotCurve *profile, profiles) {
-			profile->detach();
-			profile->setData(NULL);
-			profile->~QwtPlotCurve();
-		}
-		profiles.clear();
 		
+        my_w.plot->clearGraphs();
+
 		QPolygonF my_points;
 		foreach(QGraphicsEllipseItem *item, line->ref){
 			my_points<<item->pos();
@@ -126,60 +110,58 @@ void nCompareLines::updatePlot() {
 			nPhysD *phys=nparent->getBufferList().at(i);
             
             if (images.contains(phys) || (my_w.current->isChecked() && phys==currentBuffer)) {
-                QVector< QPointF > toPlot;
-                
+                QVector<double> toPlotx;
+                QVector<double> toPloty;
+
                 double dist=0.0;
                 double my_val=0.0;
                 for(int ii=0;ii<my_poly.size()-1;ii++) {
                     QPointF p=my_poly.at(ii);
                     my_val=phys->getPoint(p.x()-phys->get_origin().x(),p.y()-phys->get_origin().y());
-                    if (std::isfinite(my_val)) toPlot << QPointF(dist, my_val);
-                    dist+=sqrt(pow((my_poly.at(ii+1)-my_poly.at(ii)).x(),2)+pow((my_poly.at(ii+1)-my_poly.at(ii)).y(),2));
+                    if (std::isfinite(my_val)) {
+                        toPlotx << dist;
+                        toPloty << my_val;
+                    }
+                    dist+=sqrt(pow(((my_poly.at(ii+1)-my_poly.at(ii)).x())*phys->get_scale().x(),2)+pow(((my_poly.at(ii+1)-my_poly.at(ii)).y())*phys->get_scale().y(),2));
                 }
                 QPointF p=my_poly.last();
                 my_val=phys->getPoint(p.x(),p.y());
-                if (std::isfinite(my_val)) toPlot << QPointF(dist, my_val);
-                
-                QwtPlotCurve *profile=new QwtPlotCurve(QString::number(i)+": "+QString::fromUtf8(phys->getShortName().c_str()));
-                if (phys==currentBuffer) {
-                    profile->setPen(QPen(Qt::blue,1.0));
-                } else {
-                    profile->setPen(QPen(Qt::black,1.0));
-                }	
-                profile->setXAxis(QwtPlot::xBottom);
-                profile->setYAxis(QwtPlot::yLeft);
-                profile->setSamples(toPlot);
-                profile->attach(my_w.plot);
-                profiles << profile;
+                if (std::isfinite(my_val)) {
+                    toPlotx << dist;
+                    toPloty << my_val;
+                }
+                QCPGraph* graph=my_w.plot->addGraph(my_w.plot->xAxis, my_w.plot->yAxis);
+                graph->setName(QString::fromStdString(phys->getName()));
+                graph->setPen(QPen((phys==currentBuffer?Qt::blue:Qt::red)));
+                graph->setData(toPlotx,toPloty);
             }
             
 		}
-		my_w.plot->replot();
+        my_w.plot->rescaleAxes();
+        my_w.plot->replot();
 	}
 }
 
 void nCompareLines::copy_clip() {
-	QClipboard *clipboard = QApplication::clipboard();
-	clipboard->setText(getText());
+    QString t;
+    QTextStream out(&t);
+    getText(out);
+    QApplication::clipboard()->setText(t);
 	showMessage(tr("Points copied to clipboard"));
 }
 
-QString nCompareLines::getText() {
-	QString point_table;
-	if (profiles.size()>0) {
-		point_table.append("# Distance");
-		foreach (QwtPlotCurve *profile, profiles) {
-			point_table.append("\t"+profile->title().text());
-		}
-		for (unsigned int i=0;i<profiles.first()->data()->size();i++) {
-			point_table.append("\n"+QString::number(profiles.first()->data()->sample(i).x()));
-			foreach (QwtPlotCurve *profile, profiles) {
-				point_table.append("\t"+QString::number(profile->data()->sample(i).y()));
-			}
-		}
-		point_table.append("\n");
-	}
-	return point_table;
+void nCompareLines::getText(QTextStream &out) {
+    out << "# " << panName << " " << my_w.plot->graphCount() << endl;
+    for (int g=0; g<my_w.plot->graphCount(); g++) {
+        out << "# " << g << " " << my_w.plot->graph(g)->name() << endl;
+        const QCPDataMap *dataMap = my_w.plot->graph(g)->data();
+        QMap<double, QCPData>::const_iterator i = dataMap->constBegin();
+        while (i != dataMap->constEnd()) {
+            out << i.value().key << " " << i.value().value << endl;
+            ++i;
+        }
+        out << endl << endl;
+    }
 }
 
 void nCompareLines::export_txt() {
@@ -189,7 +171,7 @@ void nCompareLines::export_txt() {
 		QFile t(fnametmp);
 		t.open(QIODevice::WriteOnly| QIODevice::Text);
 		QTextStream out(&t);
-		out << getText();
+        getText(out);
 		t.close();
 		showMessage(tr("Export in file:")+fnametmp,2000);
 	}
@@ -200,10 +182,7 @@ nCompareLines::export_pdf() {
 	QString fnametmp = QFileDialog::getSaveFileName(this,tr("Save Drawing"),property("fileExport").toString(),"Vector files (*.pdf,*.svg)");
 	if (!fnametmp.isEmpty()) {
 		setProperty("fileExport", fnametmp);
-		QwtPlotRenderer renderer;
-		renderer.setDiscardFlag(QwtPlotRenderer::DiscardBackground, false);
-//		renderer.setLayoutFlag(QwtPlotRenderer::KeepFrames, true);
-		renderer.renderDocument(my_w.plot, fnametmp, QFileInfo(fnametmp).suffix(), QSizeF(150, 100), 85);
-	}
+        my_w.plot->savePdf(fnametmp,true,0,0,"Neutrino", panName);
+    }
 }
 

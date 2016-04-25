@@ -150,7 +150,7 @@ void nBoxLineout::updatePlot() {
 }
 
 void nBoxLineout::export_data(QTextStream &out) {
-    out << "# Box Lineout " << QString::fromStdString(currentBuffer->getName()) <<endl;
+    out << "# " << panName << " " << QString::fromStdString(currentBuffer->getName()) <<endl;
     for (int g=0; g<my_w.plot->graphCount(); g++) {
         out << "# " << (g==0?"Horizontal":"Vertical") << endl;
         const QCPDataMap *dataMap = my_w.plot->graph(g)->data();
