@@ -194,7 +194,7 @@ nBoxLineout::export_pdf() {
     QString fnametmp = QFileDialog::getSaveFileName(this,tr("Save Drawing"),property("fileExport").toString(),"Vector files (*.pdf)");
 	if (!fnametmp.isEmpty()) {
 		setProperty("fileExport", fnametmp);
-        my_w.plot->savePdf(fnametmp,true,0,0,"Neutrino", "nBoxLineout");
+        my_w.plot->savePdf(fnametmp,true,0,0,"Neutrino", panName);
 	}
 
 }

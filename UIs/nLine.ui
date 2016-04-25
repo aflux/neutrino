@@ -335,9 +335,6 @@
           <property name="toolTip">
            <string>Remove point</string>
           </property>
-          <property name="layoutDirection">
-           <enum>Qt::LeftToRight</enum>
-          </property>
           <property name="text">
            <string>...</string>
           </property>
