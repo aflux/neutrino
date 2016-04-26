@@ -88,7 +88,7 @@ nLineout::updatePlot(QPointF p) {
 
         QVector<double> x(z_size);
         for (unsigned int i=0;i<z_size;i++){
-            x[i]=i+lat_skip;
+            x[i]=(i+lat_skip-currentBuffer->get_origin((phys_direction)k))*currentBuffer->get_scale((phys_direction)k);
         }
         QVector<double> y(z_size);
         if (k==0) {

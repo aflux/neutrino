@@ -511,6 +511,8 @@ void nVisar::updatePlot() {
 
     my_w.plotVelocity->clearGraphs();
 
+    my_w.statusbar->showMessage("Updating");
+
     for (int k=0;k<2;k++){
         if (cPhase[0][k].size()){
 
@@ -606,7 +608,7 @@ void nVisar::updatePlot() {
 
                     velocity[k][j] = speed;
                     reflectivity[k][j] = refle;
-                    quality[k][j]= cContrast[0][k][j]/cContrast[1][k][j];
+                    quality[k][j]= cContrast[1][k][j]/cContrast[0][k][j];
 
                     for (int i=0;i<abs(setvisar[k].jump->value());i++) {
                         int jloc=i+1;
@@ -654,7 +656,7 @@ void nVisar::updatePlot() {
     my_w.plotVelocity->replot();
 
 
-    my_w.statusbar->showMessage("Plot updated",1000);
+    my_w.statusbar->showMessage("");
 
     updatePlotSOP();
 
@@ -937,16 +939,22 @@ void nVisar::getPhase(int k) {
                 fringeLine[k]->setPoints(myLine);
 
                 QCPGraph* graph;
+                QPen pen;
+                pen.setStyle((k==my_w.tabPhase->currentIndex()?Qt::SolidLine : Qt::DashLine));
+
                 graph = visar[k].plotPhaseIntensity->addGraph(visar[k].plotPhaseIntensity->xAxis, visar[k].plotPhaseIntensity->yAxis);
-                graph->setPen(QPen(Qt::red));
+                pen.setColor(Qt::red);
+                graph->setPen(pen);
                 graph->setData(time_phase[k],cPhase[m][k]);
 
                 graph = visar[k].plotPhaseIntensity->addGraph(visar[k].plotPhaseIntensity->xAxis, visar[k].plotPhaseIntensity->yAxis2);
-                graph->setPen(QPen(Qt::blue,1));
+                pen.setColor(Qt::blue);
+                graph->setPen(pen);
                 graph->setData(time_phase[k],cIntensity[m][k]);
 
                 graph = visar[k].plotPhaseIntensity->addGraph(visar[k].plotPhaseIntensity->xAxis, visar[k].plotPhaseIntensity->axisRect(0)->axis(QCPAxis::atRight,1));
-                graph->setPen(QPen(Qt::darkCyan));
+                pen.setColor(Qt::darkCyan);
+                graph->setPen(pen);
                 graph->setData(time_phase[k],cContrast[m][k]);
             }
             visar[k].plotPhaseIntensity->rescaleAxes();

@@ -591,6 +591,7 @@ public:
 	}
 
 	const double *to_dvector(enum phys_direction direction, size_t index) {
+        throw phys_deprecated();
 
 //		std::cerr<<"[to_dvector] dir: "<<direction<<", index: "<<index<<std::endl;
 		size_t size[2]={width,height};
@@ -616,7 +617,8 @@ public:
 	}
 
 	const double *to_axis(enum phys_direction direction) {
-		size_t size= direction==PHYS_X ? width : height;
+        throw phys_deprecated();
+        size_t size= direction==PHYS_X ? width : height;
 		
 		if (axis_buf[direction]==NULL) axis_buf[direction] = new double [size];
 		
