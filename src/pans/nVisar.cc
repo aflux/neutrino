@@ -1065,7 +1065,7 @@ QString nVisar::export_one(int k) {
             out += QString("#Reflectivity       : %L1 %L3\n").arg(setvisar[k].reflOffset->value()).arg(setvisar[k].reflRef->value());
             out += QString("#Jumps              : %L1\n").arg(setvisar[k].jumpst->text());
             out += QString("#Time\tVelocity\tReflectivity\tPixel\tRefShift\tShotShift\tRefInt\tShotInt\tRefContrast\tShotContrast\n");
-            for (unsigned int j=0;j<time_phase[k].size();j++) {
+            for (int j=0;j<time_phase[k].size();j++) {
                 out += QString("%L1\t%L2\t%L3\t%L4\t%L5\t%L6\t%L7\t%L8\t%L9\t%L10\t%L11\n")
                         .arg(time_vel[k][j],10,'E',3)
                         .arg(velocity[k][j],10,'E',3)
