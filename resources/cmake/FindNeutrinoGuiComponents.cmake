@@ -1,4 +1,4 @@
-# find components specific to Neutrino GUI: qwt/qt/additional files here!
+# find components specific to Neutrino GUI files here!
 
 if(DEFINED ENV{QTDIR})
   set(CMAKE_PREFIX_PATH $ENV{QTDIR} ${CMAKE_PREFIX_PATH})
@@ -7,18 +7,6 @@ endif()
 if(DEFINED QTDIR)
   set(CMAKE_PREFIX_PATH ${QTDIR} ${CMAKE_PREFIX_PATH})
 endif()
-
-if(LINUX AND DEFINED QWTDIR)
-set (QWT_LIBRARY ${QWTDIR}/lib/libqwt.so)
-set (QWT_INCLUDE_DIR ${QWTDIR}/include)
-endif()
-
-find_package(Qwt REQUIRED)
-if (QWT_FOUND)
-	include_directories(${QWT_INCLUDE_DIRS})
-	message(STATUS "qwt link: " ${QWT_LIBRARIES})
-	set(LIBS ${LIBS} ${QWT_LIBRARIES})
-endif(QWT_FOUND)
 
 #libhdf5_hl
 find_package(HDF5)

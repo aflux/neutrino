@@ -25,12 +25,6 @@
 #include "nRect.h"
 #include "neutrino.h"
 #include <iostream>
-#include <qwt_plot.h>
-#include <qwt_plot_curve.h>
-#include <qwt_plot_marker.h>
-
-#include <qwt_spline.h>
-#include <qwt_curve_fitter.h>
 
 nRect::~nRect() {
 	foreach (QGraphicsRectItem* item, ref) {

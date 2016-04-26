@@ -75,8 +75,7 @@ public slots:
 
     QString export_one(int);
     QString export_sop();
-//    QString export_plot(QwtPlot*);
-    QString export_plot();
+
     void export_pdf();
     void export_clipboard();
 
@@ -98,7 +97,7 @@ private:
     QVector<double> cPhase[2][2], cIntensity[2][2], cContrast[2][2];
     QVector<double> time_phase[2];
 
-    QVector<double> velocity[2], reflectivity[2];
+    QVector<double> velocity[2], reflectivity[2], quality[2];
     QVector<double> time_vel[2];
 
     QVector<double> sopCurve[4];

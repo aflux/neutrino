@@ -63,11 +63,6 @@ private:
 
     QPointer<QCPItemLine> my_cursor[2];
 
-//    QPointer<nBoxLineoutZoomer> picker;
-
-//	QwtPlotCurve xCut,yCut;
-//	QwtPlotMarker xMarker,yMarker, rxMarker, ryMarker;
-
     QPointer<nRect> box;
 };
 

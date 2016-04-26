@@ -113,13 +113,8 @@ void nLineoutBoth::updatePlot(QPointF p) {
 
 
         for (int k=0;k<2;k++) {
-			
-            double vmin=0, vmax=0;
-            const double *dvec = currentBuffer->to_dvector((phys_direction)k, b_p[(k+1)%2]);
             size_t lat_skip = max(b_o[k], 0);
-
             size_t z_size = min(b_c[k]-lat_skip, currentBuffer->getSizeByIndex((phys_direction)k)-lat_skip);
-            phys_get_vec_brightness(dvec+lat_skip, z_size, vmin, vmax);
 
             QVector<double> x(z_size);
             for (unsigned int i=0;i<z_size;i++){

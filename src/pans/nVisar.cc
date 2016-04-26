@@ -28,10 +28,7 @@
 nVisar::nVisar(neutrino *nparent, QString winname)
     : nGenericPan(nparent, winname)
 {
-    //QWidget: Must construct a QApplication before a QPaintDevice
     my_w.setupUi(this);
-
-    // signals
 
     connect(my_w.tabs, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
     connect(my_w.tabPhase, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
@@ -554,9 +551,10 @@ void nVisar::updatePlot() {
                     velJump_array[i].resize(time_phase[k].size());
                 }
 
+                time_vel[k].resize(time_phase[k].size());
                 velocity[k].resize(time_phase[k].size());
                 reflectivity[k].resize(time_phase[k].size());
-                time_vel[k].resize(time_phase[k].size());
+                quality[k].resize(time_phase[k].size());
 
                 for (int j=0;j<time_phase[k].size();j++) {
                     double time=(time_phase[k][j]-origin)*scale+offsetTime;
@@ -590,6 +588,8 @@ void nVisar::updatePlot() {
 
                     velocity[k][j] = speed;
                     reflectivity[k][j] = refle;
+                    quality[k][j]= cContrast[0][k][j]/cContrast[1][k][j];
+
                     for (int i=0;i<abs(setvisar[k].jump->value());i++) {
                         int jloc=i+1;
                         if (sensitivity<0) jloc*=-1;
@@ -622,6 +622,11 @@ void nVisar::updatePlot() {
                 pen.setColor(Qt::blue);
                 graph->setPen(pen);
                 graph->setData(time_vel[k],reflectivity[k]);
+
+                graph = my_w.plotVelocity->addGraph(my_w.plotVelocity->xAxis, my_w.plotVelocity->yAxis2);
+                pen.setColor(Qt::gray);
+                graph->setPen(pen);
+                graph->setData(time_vel[k],quality[k]);
 
             }
         }
@@ -1007,71 +1012,47 @@ nVisar::export_clipboard() {
     }
 }
 
-QString
-nVisar::export_sop() {
+QString nVisar::export_sop() {
     QString out;
     out += QString("#SOP Origin       : %L1\n").arg(my_w.sopOrigin->value());
     out += QString("#SOP Offset       : %L1\n").arg(my_w.sopTimeOffset->value());
     out += QString("#SOP Time scale   : %L1\n").arg(my_w.sopScale->value());
     out += QString("#SOP Direction    : %L1\n").arg(my_w.sopDirection->currentIndex()==0 ? "Vertical" : "Horizontal");
-    out += QString("#Time\tCounts\n");
+    out += QString("#Time\tCounts\tTblackbody\tTgrayIn\tTgrayOut\n");
 
-//    out += export_plot (my_w.sopPlot);
-
+    for (int i=0;i<time_sop.size();i++) {
+        out += QString::number(time_sop[i]);
+        for (int j=0;j<4;j++) {
+            out += " " + QString::number(sopCurve[j][i]);
+        }
+        out += "\n";
+    }
     return out;
 }
 
-QString nVisar::export_plot() {
-    QString out;
-    return out;
-}
-
-//QString nVisar::export_plot(QwtPlot* my_plot) {
-//    QString out;
-//    QList<QwtPlotCurve *> listCurve;
-//    const QwtPlotItemList& itmList = my_plot->itemList();
-//    for ( QwtPlotItemIterator it = itmList.begin(); it != itmList.end(); ++it ) {
-//        if ( (*it)->rtti() == QwtPlotItem::Rtti_PlotCurve ) {
-//            listCurve << (QwtPlotCurve*)(*it);
-//        }
-//    }
-
-//    if (listCurve.size()>0) {
-//        for (unsigned int j=0;j<listCurve.at(0)->data()->size();j++) {
-//            out += QString("%L1\t").arg(listCurve.at(0)->sample(j).x(),10,'E',3);
-//            for (int i=0; i<listCurve.size();i++) {
-//                out += QString("%L1\t").arg(listCurve.at(i)->sample(j).y(),10,'E',3);
-//            }
-//            out += "\n";
-//        }
-//    }
-
-//    return out;
-//}
-
-QString
-nVisar::export_one(int k) {
+QString nVisar::export_one(int k) {
     QString out;
     if (k<2) {
         if (visar[k].enableVisar->isChecked()) {
-            out += QString("#VISAR %L1 Offset shift       : %L2\n").arg(QString::number(k+1)).arg(setvisar[k].offsetShift->value());
-            out += QString("#VISAR %L1 Sensitivity        : %L2\n").arg(QString::number(k+1)).arg(setvisar[k].sensitivity->value());
-            out += QString("#VISAR %L1 Reflectivity       : %L2 %L3\n").arg(QString::number(k+1)).arg(setvisar[k].reflOffset->value()).arg(setvisar[k].reflRef->value());
-            out += QString("#VISAR %L1 Jumps              : %L2\n").arg(QString::number(k+1)).arg(setvisar[k].jumpst->text());
+            out += "#VISAR " + QString::number(k+1) + "\n";
+            out += QString("#Offset shift       : %L1\n").arg(setvisar[k].offsetShift->value());
+            out += QString("#Sensitivity        : %L1\n").arg(setvisar[k].sensitivity->value());
+            out += QString("#Reflectivity       : %L1 %L3\n").arg(setvisar[k].reflOffset->value()).arg(setvisar[k].reflRef->value());
+            out += QString("#Jumps              : %L1\n").arg(setvisar[k].jumpst->text());
             out += QString("#Time\tVelocity\tReflectivity\tPixel\tRefShift\tShotShift\tRefInt\tShotInt\tRefContrast\tShotContrast\n");
-//            for (unsigned int j=0;j<cPhase[0][k]->data()->size();j++) {
-//                out += QString("%L1\t%L2\t%L3\t%L4\t%L5\t%L6\t%L7\t%L8\t%L9\t%L10\n")
-//                        .arg(velocity[k]->sample(j).x(),10,'E',3)
-//                        .arg(velocity[k]->sample(j).y(),10,'E',3)
-//                        .arg(reflectivity[k]->sample(j).y(),10,'E',3)
-//                        .arg((int)cPhase[0][k]->sample(j).x())
-//                        .arg(cPhase[0][k]->sample(j).y(),10,'E',3)
-//                        .arg(cPhase[1][k]->sample(j).y(),10,'E',3)
-//                        .arg(cIntensity[0][k]->sample(j).y(),10,'E',3)
-//                        .arg(cIntensity[1][k]->sample(j).y(),10,'E',3)
-//                        .arg(cContrast[0][k]->sample(j).y(),10,'E',3)
-//                        .arg(cContrast[1][k]->sample(j).y(),10,'E',3);
-//            }
+            for (unsigned int j=0;j<time_phase[k].size();j++) {
+                out += QString("%L1\t%L2\t%L3\t%L4\t%L5\t%L6\t%L7\t%L8\t%L9\t%L10\n")
+                        .arg(time_vel[k][j],10,'E',3)
+                        .arg(velocity[k][j],10,'E',3)
+                        .arg(reflectivity[k][j],10,'E',3)
+                        .arg(time_phase[k][j])
+                        .arg(cPhase[0][k][j],10,'E',3)
+                        .arg(cPhase[1][k][j],10,'E',3)
+                        .arg(cIntensity[0][k][j],10,'E',3)
+                        .arg(cIntensity[1][k][j],10,'E',3)
+                        .arg(cContrast[0][k][j],10,'E',3)
+                        .arg(cContrast[1][k][j],10,'E',3);
+            }
         }
     }
     return out;
@@ -1082,30 +1063,20 @@ nVisar::export_pdf() {
     QString fnametmp = QFileDialog::getSaveFileName(this,tr("Save Drawing"),property("fileExport").toString(),"Vector files (*.pdf,*.svg)");
     if (!fnametmp.isEmpty()) {
         setProperty("fileExport", fnametmp);
-//        QwtPlotRenderer renderer;
-//        renderer.setDiscardFlag(QwtPlotRenderer::DiscardBackground, false);
-//        //		renderer.setLayoutFlag(QwtPlotRenderer::KeepFrames, true);
-        
-//        double DPI=85;
-        
-//        QSizeF my_size(150, 100);
-        
-//        switch (my_w.tabs->currentIndex()) {
-//        case 0:
-//            renderer.renderDocument(visar[my_w.tabPhase->currentIndex()].plotPhaseIntensity, fnametmp, QFileInfo(fnametmp).suffix(), my_size, DPI);
-//            break;
-//        case 1:
-//            renderer.renderDocument(my_w.plotVelocity, fnametmp, QFileInfo(fnametmp).suffix(), my_size, DPI);
-//            break;
-//        case 2:
-//            renderer.renderDocument(my_w.sopPlot, fnametmp, QFileInfo(fnametmp).suffix(), my_size, DPI);
-//            break;
-//        default:
-//            break;
-//        }
-
+        switch (my_w.tabs->currentIndex()) {
+        case 0:
+            visar[my_w.tabPhase->currentIndex()].plotPhaseIntensity->savePdf(fnametmp,true,0,0,"Neutrino", panName+" "+my_w.tabPhase->tabText(my_w.tabPhase->currentIndex()));
+            break;
+        case 1:
+            my_w.plotVelocity->savePdf(fnametmp,true,0,0,"Neutrino", panName+" Velocity");
+            break;
+        case 2:
+            my_w.sopPlot->savePdf(fnametmp,true,0,0,"Neutrino", panName+" SOP");
+            break;
+        default:
+            break;
+        }
     }
-
 }
 
 

@@ -36,57 +36,8 @@
     <property name="bottomMargin">
      <number>4</number>
     </property>
-    <item row="0" column="1">
-     <widget class="QLineEdit" name="maxVal">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>10</pointsize>
-       </font>
-      </property>
-      <property name="toolTip">
-       <string>Higher value</string>
-      </property>
-      <property name="text">
-       <string>1</string>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0">
-     <widget class="QLineEdit" name="minVal">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>10</pointsize>
-       </font>
-      </property>
-      <property name="toolTip">
-       <string>Lower value</string>
-      </property>
-      <property name="text">
-       <string>0</string>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0" colspan="2">
-     <widget class="QwtPlot" name="the_plot">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-     </widget>
+    <item row="0" column="0" colspan="2">
+     <widget class="QCustomPlot" name="plot" native="true"/>
     </item>
    </layout>
   </widget>
@@ -107,10 +58,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionLockColors"/>
-   <addaction name="actionGetMinMax"/>
    <addaction name="actionAutoscale"/>
-   <addaction name="actionMin"/>
-   <addaction name="actionMax"/>
    <addaction name="actionToggleZoom"/>
    <addaction name="actionLockClick"/>
   </widget>
@@ -186,7 +134,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../resources/icons/icons.qrc">
+    <iconset resource="../../neutrino-build/src/icons.qrc">
      <normaloff>:/icons/autoRefresh.png</normaloff>
      <normalon>:/icons/noAutoRefresh.png</normalon>:/icons/autoRefresh.png</iconset>
    </property>
@@ -202,7 +150,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../resources/icons/icons.qrc">
+    <iconset resource="../../neutrino-build/src/icons.qrc">
      <normaloff>:/icons/lockColor.png</normaloff>
      <normalon>:/icons/lockColor.png</normalon>:/icons/lockColor.png</iconset>
    </property>
@@ -216,14 +164,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QwtPlot</class>
-   <extends>QFrame</extends>
-   <header>qwt_plot.h</header>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../resources/icons/icons.qrc"/>
+  <include location="../../neutrino-build/src/icons.qrc"/>
  </resources>
  <connections/>
 </ui>
