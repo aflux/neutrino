@@ -535,14 +535,12 @@ public:
         double mini=minmax.first();
         double maxi=minmax.second();
 
-        DEBUG("here");
         if (!property.have("gamma")) {
             property["gamma"]=(int)1;
         }
         double my_gamma=gamma();
 
         if (getSurf()>0 && palette.size()==768) {
-            DEBUG("here");
 
             if (uchar_buf.size() == getSurf()*3 &&
                     display_property.have("display_range") &&
@@ -551,7 +549,6 @@ public:
                     display_property.have("gamma") &&
                     display_property["gamma"].get_i()==property["gamma"].get_i()) {
 
-                DEBUG("here");
                 vec2f old_display_range=display_property["display_range"];
                 vec2f new_display_range=property["display_range"];
 

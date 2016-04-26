@@ -254,11 +254,7 @@ void nVisar::bufferChanged(nPhysD*phys) {
 }
 
 void nVisar::tabChanged(int k) {
-
     QApplication::processEvents();
-
-    // QPainter::begin: Paint device returned engine == 0, type: 2
-
     QTabWidget *tabWidget=qobject_cast<QTabWidget *>(sender());
     if (!tabWidget) tabWidget=my_w.tabs;
 
@@ -940,7 +936,7 @@ void nVisar::getPhase(int k) {
 
                 QCPGraph* graph;
                 QPen pen;
-                pen.setStyle((k==my_w.tabPhase->currentIndex()?Qt::SolidLine : Qt::DashLine));
+                pen.setStyle((m==my_w.tabPhase->currentIndex()?Qt::SolidLine : Qt::DashLine));
 
                 graph = visar[k].plotPhaseIntensity->addGraph(visar[k].plotPhaseIntensity->xAxis, visar[k].plotPhaseIntensity->yAxis);
                 pen.setColor(Qt::red);
