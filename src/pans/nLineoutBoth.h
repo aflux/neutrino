@@ -42,7 +42,8 @@ public slots:
 	void updatePlot(QPointF);
     void setBehaviour();
 	void updateLastPoint();
-    
+    void mouseWheel();
+
 private:
 	Ui::nLineoutBoth my_w;
     QPointer<QCPItemLine> my_cursor[2];

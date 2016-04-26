@@ -105,7 +105,7 @@ nLineout::updatePlot(QPointF p) {
         my_cursor->end->setCoords(b_p[k], QCPRange::maxRange);
 
         my_w.plot->graph(0)->setData(x,y);
-        my_w.plot->graph(0)->keyAxis()->setRange(lat_skip, lat_skip+z_size);
+        my_w.plot->graph(k)->keyAxis()->setRange(x.first(), x.last());
 
         if(!my_w.actionAutoscale->isChecked()) {
             QVector<double>::iterator minY = std::min_element(y.begin(), y.end());

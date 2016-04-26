@@ -74,6 +74,7 @@ nLineoutBoth::nLineoutBoth(neutrino *parent, QString win_name)
     my_w.plot->xAxis2->setLabelColor(Qt::blue);
     my_w.plot->xAxis2->setTickLabelColor(Qt::blue);
 
+    connect(my_w.plot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(mouseWheel()));
 
     my_w.plot->xAxis->setLabelFont(nparent->my_w.my_view->font());
     my_w.plot->yAxis->setLabelFont(nparent->my_w.my_view->font());
@@ -82,6 +83,7 @@ nLineoutBoth::nLineoutBoth(neutrino *parent, QString win_name)
 
 //    my_w.plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectAxes | QCP::iSelectLegend | QCP::iSelectPlottables | QCP::iMultiSelect | QCP::iSelectItems | QCP::iSelectOther);
 
+//    my_w.plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectAxes | QCP::iSelectLegend | QCP::iSelectPlottables);
 	decorate();
 	updateLastPoint();
     
@@ -97,6 +99,30 @@ void nLineoutBoth::setBehaviour() {
     }
 }
 
+void nLineoutBoth::mouseWheel()
+{
+  // if an axis is selected, only allow the direction of that axis to be zoomed
+  // if no axis is selected, both directions may be zoomed
+
+  if (my_w.plot->xAxis->selectedParts().testFlag(QCPAxis::spAxis)){
+    my_w.plot->axisRect()->setRangeZoomAxes(my_w.plot->xAxis,my_w.plot->yAxis);
+    my_w.plot->axisRect()->setRangeZoom(my_w.plot->xAxis->orientation());
+  }
+  else if (my_w.plot->yAxis->selectedParts().testFlag(QCPAxis::spAxis)){
+    my_w.plot->axisRect()->setRangeZoomAxes(my_w.plot->xAxis,my_w.plot->yAxis);
+    my_w.plot->axisRect()->setRangeZoom(my_w.plot->yAxis->orientation());
+  }
+  else if (my_w.plot->xAxis2->selectedParts().testFlag(QCPAxis::spAxis)){
+    my_w.plot->axisRect()->setRangeZoomAxes(my_w.plot->xAxis2,my_w.plot->yAxis2);
+    my_w.plot->axisRect()->setRangeZoom(my_w.plot->xAxis2->orientation());
+  }
+  else if (my_w.plot->yAxis2->selectedParts().testFlag(QCPAxis::spAxis)){
+    my_w.plot->axisRect()->setRangeZoomAxes(my_w.plot->xAxis2,my_w.plot->yAxis2);
+    my_w.plot->axisRect()->setRangeZoom(my_w.plot->yAxis2->orientation());
+  }
+  else
+    my_w.plot->axisRect()->setRangeZoom(Qt::Horizontal|Qt::Vertical);
+}
 // mouse movement
 void nLineoutBoth::updatePlot(QPointF p) {
 
@@ -136,9 +162,9 @@ void nLineoutBoth::updatePlot(QPointF p) {
             }
             my_w.plot->graph(k)->setData(x,y);
 
-            my_w.plot->graph(k)->keyAxis()->setRange(lat_skip, lat_skip+z_size);
+            my_w.plot->graph(k)->keyAxis()->setRange(x.first(), x.last());
 
-            if(my_w.autoScale->isChecked()) {
+            if(!my_w.autoScale->isChecked()) {
                 QVector<double>::iterator minY = std::min_element(y.begin(), y.end());
                 QVector<double>::iterator maxY = std::max_element(y.begin(), y.end());
                 my_w.plot->graph(k)->valueAxis()->setRange(*minY,*maxY);
