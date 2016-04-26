@@ -128,9 +128,18 @@ nVisar::nVisar(neutrino *nparent, QString winname)
         visar[k].plotPhaseIntensity->yAxis->setLabelColor(Qt::red);
         visar[k].plotPhaseIntensity->yAxis->setTickLabelColor(Qt::red);
 
-        visar[k].plotPhaseIntensity->yAxis2->setLabel(tr("Intensity - Contrast"));
+        visar[k].plotPhaseIntensity->yAxis2->setLabel(tr("Intensity"));
         visar[k].plotPhaseIntensity->yAxis2->setLabelColor(Qt::blue);
         visar[k].plotPhaseIntensity->yAxis2->setTickLabelColor(Qt::blue);
+
+
+        QCPAxis *myAxis = visar[k].plotPhaseIntensity->axisRect(0)->addAxis(QCPAxis::atRight,0);
+        myAxis->setLabel(tr("Contrast"));
+        myAxis->setLabelColor(Qt::darkCyan);
+        myAxis->setTickLabelColor(Qt::darkCyan);
+        myAxis->setTickLabelFont(nparent->my_w.my_view->font());
+        myAxis->setLabelFont(nparent->my_w.my_view->font());
+
 
         visar[k].guess->setProperty("id", k);
         visar[k].doWaveButton->setProperty("id", k);
@@ -159,6 +168,15 @@ nVisar::nVisar(neutrino *nparent, QString winname)
     my_w.plotVelocity->yAxis2->setLabel(tr("Reflectivity"));
     my_w.plotVelocity->yAxis2->setLabelColor(Qt::blue);
     my_w.plotVelocity->yAxis2->setTickLabelColor(Qt::blue);
+
+
+
+    QCPAxis *myAxis = my_w.plotVelocity->axisRect(0)->addAxis(QCPAxis::atRight,0);
+    myAxis->setLabel(tr("Quality"));
+    myAxis->setLabelColor(Qt::darkCyan);
+    myAxis->setTickLabelColor(Qt::darkCyan);
+    myAxis->setTickLabelFont(nparent->my_w.my_view->font());
+    myAxis->setLabelFont(nparent->my_w.my_view->font());
 
     mouseMarker[2]=new QCPItemLine(my_w.plotVelocity);
     mouseMarker[3]=new QCPItemLine(my_w.sopPlot);
@@ -623,8 +641,9 @@ void nVisar::updatePlot() {
                 graph->setPen(pen);
                 graph->setData(time_vel[k],reflectivity[k]);
 
-                graph = my_w.plotVelocity->addGraph(my_w.plotVelocity->xAxis, my_w.plotVelocity->yAxis2);
-                pen.setColor(Qt::gray);
+
+                graph = my_w.plotVelocity->addGraph(my_w.plotVelocity->xAxis, my_w.plotVelocity->axisRect(0)->axis(QCPAxis::atRight,1));
+                pen.setColor(Qt::darkCyan);
                 graph->setPen(pen);
                 graph->setData(time_vel[k],quality[k]);
 
@@ -845,37 +864,39 @@ void nVisar::getPhase(int k) {
                         time_phase[k]  << j;
                         cPhase[m][k]  << phase[k][m].point(geom2.center().x(),j,0);
 
-                        cContrast[m][k]  << contrast[k][m].point(geom2.center().x(),j-intensityShift,0);
                         double intensityTmp=0.0;
+                        double contrastTmp=0.0;
                         for (int i=geom2.left(); i<geom2.right();i++) {
                             if (m==0) { //reference
                                 intensityTmp+=intensity[k][m].point(i,j-intensityShift,0);
+                                contrastTmp+=contrast[k][m].point(i,j-intensityShift,0);
                             } else { //shot
                                 intensityTmp+=intensity[k][m].point(i,j,0);
+                                contrastTmp+=contrast[k][m].point(i,j,0);
                             }
 
                         }
-                        double my_val=intensityTmp/geom2.width()-offsetIntensity;
-                        if (m==0) my_val *= visar[k].multRef->value();
-                        cIntensity[m][k] << my_val;
+                        cIntensity[m][k] << (intensityTmp/geom2.width()-offsetIntensity)*((m==0)?visar[k].multRef->value():1.0);
+                        cContrast[m][k]  << contrastTmp/geom2.height()*((m==0)?visar[k].multRef->value():1.0);
                     }
                 } else { //fringes are horizontal
                     for (int j=geom2.left(); j<geom2.right();j++) {
                         time_phase[k]  << j;
                         cPhase[m][k]  << phase[k][m].point(j,geom2.center().y(),0);
-                        cContrast[m][k]  << contrast[k][m].point(j-intensityShift,geom2.center().y(),0);
 
                         double intensityTmp=0.0;
+                        double contrastTmp=0.0;
                         for (int i=geom2.top(); i<geom2.bottom();i++) {
                             if (m==0) { //reference
                                 intensityTmp+=intensity[k][m].point(j-intensityShift,i,0);
+                                contrastTmp+=contrast[k][m].point(j-intensityShift,i,0);
                             } else { //shot
                                 intensityTmp+=intensity[k][m].point(j,i,0);
+                                contrastTmp+=contrast[k][m].point(j,i,0);
                             }
                         }
-                        double my_val=intensityTmp/geom2.height()-offsetIntensity;
-                        if (m==0) my_val *= visar[k].multRef->value();
-                        cIntensity[m][k] << my_val;
+                        cIntensity[m][k] << (intensityTmp/geom2.height()-offsetIntensity)*((m==0)?visar[k].multRef->value():1.0);
+                        cContrast[m][k]  << contrastTmp/geom2.height()*((m==0)?visar[k].multRef->value():1.0);
                     }
                 }
 
@@ -924,8 +945,8 @@ void nVisar::getPhase(int k) {
                 graph->setPen(QPen(Qt::blue,1));
                 graph->setData(time_phase[k],cIntensity[m][k]);
 
-                graph = visar[k].plotPhaseIntensity->addGraph(visar[k].plotPhaseIntensity->xAxis, visar[k].plotPhaseIntensity->yAxis2);
-                graph->setPen(QPen(Qt::blue,0.5));
+                graph = visar[k].plotPhaseIntensity->addGraph(visar[k].plotPhaseIntensity->xAxis, visar[k].plotPhaseIntensity->axisRect(0)->axis(QCPAxis::atRight,1));
+                graph->setPen(QPen(Qt::darkCyan));
                 graph->setData(time_phase[k],cContrast[m][k]);
             }
             visar[k].plotPhaseIntensity->rescaleAxes();
@@ -1041,10 +1062,11 @@ QString nVisar::export_one(int k) {
             out += QString("#Jumps              : %L1\n").arg(setvisar[k].jumpst->text());
             out += QString("#Time\tVelocity\tReflectivity\tPixel\tRefShift\tShotShift\tRefInt\tShotInt\tRefContrast\tShotContrast\n");
             for (unsigned int j=0;j<time_phase[k].size();j++) {
-                out += QString("%L1\t%L2\t%L3\t%L4\t%L5\t%L6\t%L7\t%L8\t%L9\t%L10\n")
+                out += QString("%L1\t%L2\t%L3\t%L4\t%L5\t%L6\t%L7\t%L8\t%L9\t%L10\t%L11\n")
                         .arg(time_vel[k][j],10,'E',3)
                         .arg(velocity[k][j],10,'E',3)
                         .arg(reflectivity[k][j],10,'E',3)
+                        .arg(quality[k][j],10,'E',3)
                         .arg(time_phase[k][j])
                         .arg(cPhase[0][k][j],10,'E',3)
                         .arg(cPhase[1][k][j],10,'E',3)
