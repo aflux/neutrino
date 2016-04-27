@@ -35,6 +35,8 @@ nLineout::nLineout(neutrino *parent, QString win_name, enum phys_direction plot_
 
     connect(my_w.actionLockClick,SIGNAL(triggered()), this, SLOT(setBehaviour()));
     setBehaviour();
+
+    connect(my_w.actionAutoscale, SIGNAL(toggled(bool)), my_w.actionLockColors, SLOT(setEnabled(bool)));
     
     my_w.plot->addGraph(my_w.plot->xAxis, my_w.plot->yAxis);
     my_w.plot->graph(0)->setPen(QPen(Qt::black));
@@ -43,6 +45,8 @@ nLineout::nLineout(neutrino *parent, QString win_name, enum phys_direction plot_
 
     my_w.plot->xAxis->setTickLabelFont(nparent->my_w.my_view->font());
     my_w.plot->yAxis->setTickLabelFont(nparent->my_w.my_view->font());
+
+    my_w.plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 
     decorate();
     updateLastPoint();
@@ -105,7 +109,7 @@ nLineout::updatePlot(QPointF p) {
         my_cursor->end->setCoords(b_p[k], QCPRange::maxRange);
 
         my_w.plot->graph(0)->setData(x,y);
-        my_w.plot->graph(k)->keyAxis()->setRange(x.first(), x.last());
+        my_w.plot->graph(0)->keyAxis()->setRange(x.first(), x.last());
 
         if(!my_w.actionAutoscale->isChecked()) {
             QVector<double>::iterator minY = std::min_element(y.begin(), y.end());
@@ -115,8 +119,6 @@ nLineout::updatePlot(QPointF p) {
             if(my_w.actionLockColors->isChecked()) {
                 vec2f rang=currentBuffer->property["display_range"];
                 my_w.plot->graph(0)->valueAxis()->setRange(rang.x(),rang.y());
-            } else {
-                my_w.plot->graph(0)->valueAxis()->setRange(currentBuffer->get_min(), currentBuffer->get_max());
             }
         }
         statusBar()->showMessage(tr("Point (")+QString::number(p.x())+","+QString::number(p.y())+")="+QString::number(currentBuffer->point(p.x(),p.y())));

@@ -91,6 +91,9 @@ public slots:
     void loadSettings(QString);
 
     void bufferChanged(nPhysD*);
+
+    void axisClick(QCPAxis*,QCPAxis::SelectablePart,QMouseEvent*);
+
     
 private:
 
