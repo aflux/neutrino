@@ -42,7 +42,7 @@ public slots:
 	void updatePlot(QPointF);
     void setBehaviour();
 	void updateLastPoint();
-    void mouseWheel();
+    void axisClick(QCPAxis*,QCPAxis::SelectablePart,QMouseEvent*);
 
 private:
 	Ui::nLineoutBoth my_w;

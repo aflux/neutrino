@@ -59,16 +59,16 @@ nBoxLineout::nBoxLineout(neutrino *nparent, QString winname)
     my_w.plot->xAxis2->setTickLabelFont(nparent->my_w.my_view->font());
     my_w.plot->yAxis2->setTickLabelFont(nparent->my_w.my_view->font());
 
-    my_w.plot->xAxis->setLabel(tr("X (red)"));
+    my_w.plot->xAxis->setLabel(tr("X"));
     my_w.plot->xAxis->setLabelColor(Qt::red);
     my_w.plot->xAxis->setTickLabelColor(Qt::red);
-    my_w.plot->yAxis2->setLabel(tr("X value (blue)"));
+    my_w.plot->yAxis2->setLabel(tr("X value"));
     my_w.plot->yAxis2->setLabelColor(Qt::red);
     my_w.plot->yAxis2->setTickLabelColor(Qt::red);
-    my_w.plot->yAxis->setLabel(tr("Y (blue)"));
+    my_w.plot->yAxis->setLabel(tr("Y"));
     my_w.plot->yAxis->setLabelColor(Qt::blue);
     my_w.plot->yAxis->setTickLabelColor(Qt::blue);
-    my_w.plot->xAxis2->setLabel(tr("Y value (blue)"));
+    my_w.plot->xAxis2->setLabel(tr("Y value"));
     my_w.plot->xAxis2->setLabelColor(Qt::blue);
     my_w.plot->xAxis2->setTickLabelColor(Qt::blue);
 
@@ -77,6 +77,12 @@ nBoxLineout::nBoxLineout(neutrino *nparent, QString winname)
     my_w.plot->xAxis2->setLabelFont(nparent->my_w.my_view->font());
     my_w.plot->yAxis2->setLabelFont(nparent->my_w.my_view->font());
 
+
+    my_w.plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+    my_w.plot->xAxis->setLabelPadding(-1);
+    my_w.plot->yAxis->setLabelPadding(-1);
+    my_w.plot->xAxis2->setLabelPadding(-1);
+    my_w.plot->yAxis2->setLabelPadding(-1);
 
 	decorate();
 	loadDefaults();

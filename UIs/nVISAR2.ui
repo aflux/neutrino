@@ -406,11 +406,13 @@
   <tabstop>enableVisar</tabstop>
   <tabstop>refImage</tabstop>
   <tabstop>shotImage</tabstop>
+  <tabstop>doWaveButton</tabstop>
   <tabstop>guess</tabstop>
   <tabstop>carrierPhys</tabstop>
   <tabstop>guessWeight</tabstop>
   <tabstop>interfringe</tabstop>
   <tabstop>angle</tabstop>
+  <tabstop>resolution</tabstop>
   <tabstop>offRef</tabstop>
   <tabstop>offShot</tabstop>
   <tabstop>intensityShift</tabstop>

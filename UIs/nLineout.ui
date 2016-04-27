@@ -42,6 +42,9 @@
    </layout>
   </widget>
   <widget class="QToolBar" name="toolBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
@@ -57,8 +60,9 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionLockColors"/>
    <addaction name="actionAutoscale"/>
+   <addaction name="actionLockColors"/>
+   <addaction name="separator"/>
    <addaction name="actionToggleZoom"/>
    <addaction name="actionLockClick"/>
   </widget>
@@ -136,7 +140,7 @@
    <property name="icon">
     <iconset resource="../../neutrino-build/src/icons.qrc">
      <normaloff>:/icons/autoRefresh.png</normaloff>
-     <normalon>:/icons/noAutoRefresh.png</normalon>:/icons/autoRefresh.png</iconset>
+     <normalon>:/icons/center.png</normalon>:/icons/autoRefresh.png</iconset>
    </property>
    <property name="text">
     <string>lockClick</string>
@@ -144,10 +148,16 @@
    <property name="toolTip">
     <string>update on click</string>
    </property>
+   <property name="neutrinoSave" stdset="0">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="actionLockColors">
    <property name="checkable">
     <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
    </property>
    <property name="icon">
     <iconset resource="../../neutrino-build/src/icons.qrc">
@@ -159,6 +169,9 @@
    </property>
    <property name="toolTip">
     <string>Lock on displayed colorbar</string>
+   </property>
+   <property name="neutrinoSave" stdset="0">
+    <bool>true</bool>
    </property>
   </action>
  </widget>

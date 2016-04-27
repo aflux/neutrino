@@ -31,8 +31,8 @@ nLineoutBoth::nLineoutBoth(neutrino *parent, QString win_name)
 	my_w.setupUi(this);
 
     my_w.statusBar->addPermanentWidget(my_w.autoScale, 0);
-    my_w.statusBar->addPermanentWidget(my_w.lockClick, 0);
     my_w.statusBar->addPermanentWidget(my_w.lockColors, 0);
+    my_w.statusBar->addPermanentWidget(my_w.lockClick, 0);
 
     connect(parent, SIGNAL(bufferChanged(nPhysD*)), this, SLOT(updateLastPoint(void)));
 
@@ -42,13 +42,21 @@ nLineoutBoth::nLineoutBoth(neutrino *parent, QString win_name)
     connect(my_w.lockClick,SIGNAL(released()), this, SLOT(setBehaviour()));
     setBehaviour();
 
+    connect(my_w.autoScale, SIGNAL(toggled(bool)), my_w.lockColors, SLOT(setEnabled(bool)));
+
+
     my_w.plot->addGraph(my_w.plot->xAxis, my_w.plot->yAxis2);
     my_w.plot->graph(0)->setPen(QPen(Qt::red));
     my_w.plot->addGraph(my_w.plot->yAxis, my_w.plot->xAxis2);
     my_w.plot->graph(1)->setPen(QPen(Qt::blue));
 
-    my_cursor[0]=new QCPItemLine(my_w.plot);
-    my_cursor[1]=new QCPItemLine(my_w.plot);
+    for (int k=0;k<2;k++) {
+        my_cursor[k]=new QCPItemLine(my_w.plot);
+        if (currentBuffer) {
+            my_w.plot->graph(k)->keyAxis()->setRange(currentBuffer->getW(),currentBuffer->getH());
+            my_w.plot->graph(k)->valueAxis()->setRange(currentBuffer->get_min(),currentBuffer->get_max());
+        }
+    }
 
     my_w.plot->xAxis2->setVisible(true);
     my_w.plot->yAxis2->setVisible(true);
@@ -61,30 +69,41 @@ nLineoutBoth::nLineoutBoth(neutrino *parent, QString win_name)
     my_w.plot->xAxis2->setTickLabelFont(nparent->my_w.my_view->font());
     my_w.plot->yAxis2->setTickLabelFont(nparent->my_w.my_view->font());
 
-    my_w.plot->xAxis->setLabel(tr("X (red)"));
+    my_w.plot->xAxis->setLabel(tr("X"));
+    my_w.plot->xAxis->setLabelPadding(-1);
     my_w.plot->xAxis->setLabelColor(Qt::red);
     my_w.plot->xAxis->setTickLabelColor(Qt::red);
-    my_w.plot->yAxis2->setLabel(tr("X value (blue)"));
+    my_w.plot->yAxis2->setLabel(tr("X value"));
+    my_w.plot->yAxis2->setLabelPadding(-1);
     my_w.plot->yAxis2->setLabelColor(Qt::red);
     my_w.plot->yAxis2->setTickLabelColor(Qt::red);
-    my_w.plot->yAxis->setLabel(tr("Y (blue)"));
+    my_w.plot->yAxis->setLabel(tr("Y"));
+    my_w.plot->yAxis->setLabelPadding(-1);
     my_w.plot->yAxis->setLabelColor(Qt::blue);
     my_w.plot->yAxis->setTickLabelColor(Qt::blue);
-    my_w.plot->xAxis2->setLabel(tr("Y value (blue)"));
+    my_w.plot->xAxis2->setLabel(tr("Y value"));
     my_w.plot->xAxis2->setLabelColor(Qt::blue);
     my_w.plot->xAxis2->setTickLabelColor(Qt::blue);
+    my_w.plot->xAxis2->setLabelPadding(-1);
 
-    connect(my_w.plot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(mouseWheel()));
+    my_w.plot->xAxis->setSelectableParts(QCPAxis::spAxis);
+    my_w.plot->yAxis->setSelectableParts(QCPAxis::spAxis);
+    my_w.plot->xAxis2->setSelectableParts(QCPAxis::spAxis);
+    my_w.plot->yAxis2->setSelectableParts(QCPAxis::spAxis);
+
+    connect(my_w.plot, SIGNAL(axisClick(QCPAxis*,QCPAxis::SelectablePart,QMouseEvent*)), this, SLOT(axisClick(QCPAxis*,QCPAxis::SelectablePart,QMouseEvent*)));
 
     my_w.plot->xAxis->setLabelFont(nparent->my_w.my_view->font());
     my_w.plot->yAxis->setLabelFont(nparent->my_w.my_view->font());
     my_w.plot->xAxis2->setLabelFont(nparent->my_w.my_view->font());
     my_w.plot->yAxis2->setLabelFont(nparent->my_w.my_view->font());
 
-//    my_w.plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectAxes | QCP::iSelectLegend | QCP::iSelectPlottables | QCP::iMultiSelect | QCP::iSelectItems | QCP::iSelectOther);
+    my_w.plot->axisRect()->setRangeDrag(0);
+    my_w.plot->axisRect()->setRangeZoom(0);
 
-//    my_w.plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectAxes | QCP::iSelectLegend | QCP::iSelectPlottables);
-	decorate();
+    my_w.plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+
+    decorate();
 	updateLastPoint();
     
 }
@@ -99,31 +118,17 @@ void nLineoutBoth::setBehaviour() {
     }
 }
 
-void nLineoutBoth::mouseWheel()
-{
-  // if an axis is selected, only allow the direction of that axis to be zoomed
-  // if no axis is selected, both directions may be zoomed
-
-  if (my_w.plot->xAxis->selectedParts().testFlag(QCPAxis::spAxis)){
-    my_w.plot->axisRect()->setRangeZoomAxes(my_w.plot->xAxis,my_w.plot->yAxis);
-    my_w.plot->axisRect()->setRangeZoom(my_w.plot->xAxis->orientation());
-  }
-  else if (my_w.plot->yAxis->selectedParts().testFlag(QCPAxis::spAxis)){
-    my_w.plot->axisRect()->setRangeZoomAxes(my_w.plot->xAxis,my_w.plot->yAxis);
-    my_w.plot->axisRect()->setRangeZoom(my_w.plot->yAxis->orientation());
-  }
-  else if (my_w.plot->xAxis2->selectedParts().testFlag(QCPAxis::spAxis)){
-    my_w.plot->axisRect()->setRangeZoomAxes(my_w.plot->xAxis2,my_w.plot->yAxis2);
-    my_w.plot->axisRect()->setRangeZoom(my_w.plot->xAxis2->orientation());
-  }
-  else if (my_w.plot->yAxis2->selectedParts().testFlag(QCPAxis::spAxis)){
-    my_w.plot->axisRect()->setRangeZoomAxes(my_w.plot->xAxis2,my_w.plot->yAxis2);
-    my_w.plot->axisRect()->setRangeZoom(my_w.plot->yAxis2->orientation());
-  }
-  else
-    my_w.plot->axisRect()->setRangeZoom(Qt::Horizontal|Qt::Vertical);
+void nLineoutBoth::axisClick(QCPAxis*ax,QCPAxis::SelectablePart,QMouseEvent*) {
+    DEBUG("Here");
+    if (!ax->label().isEmpty()) {
+        statusBar()->showMessage("Zoom/Drag for "+ax->label(),5000);
+    }
+    my_w.plot->axisRect()->setRangeDragAxes(ax,ax);
+    my_w.plot->axisRect()->setRangeDrag(ax->orientation());
+    my_w.plot->axisRect()->setRangeZoomAxes(ax,ax);
+    my_w.plot->axisRect()->setRangeZoom(ax->orientation());
 }
-// mouse movement
+
 void nLineoutBoth::updatePlot(QPointF p) {
 
     if (currentBuffer != NULL) {
@@ -164,6 +169,7 @@ void nLineoutBoth::updatePlot(QPointF p) {
 
             my_w.plot->graph(k)->keyAxis()->setRange(x.first(), x.last());
 
+
             if(!my_w.autoScale->isChecked()) {
                 QVector<double>::iterator minY = std::min_element(y.begin(), y.end());
                 QVector<double>::iterator maxY = std::max_element(y.begin(), y.end());
@@ -172,8 +178,6 @@ void nLineoutBoth::updatePlot(QPointF p) {
                 if(my_w.lockColors->isChecked()) {
                     vec2f rang=currentBuffer->property["display_range"];
                     my_w.plot->graph(k)->valueAxis()->setRange(rang.x(),rang.y());
-                } else {
-                    my_w.plot->graph(k)->valueAxis()->setRange(currentBuffer->get_min(), currentBuffer->get_max());
                 }
             }
         }

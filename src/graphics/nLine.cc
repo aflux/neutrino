@@ -328,6 +328,9 @@ void nLine::updatePlot () {
             my_w.plot->addGraph(my_w.plot->xAxis, my_w.plot->yAxis);
             my_w.plot->graph(0)->setPen(QPen(Qt::blue));
             my_w.plot->xAxis->setLabel(tr("distance"));
+            my_w.plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+            my_w.plot->xAxis->setLabelPadding(-1);
+            my_w.plot->yAxis->setLabelPadding(-1);
         }
 
 		double colore;

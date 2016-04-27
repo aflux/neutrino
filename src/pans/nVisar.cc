@@ -92,6 +92,8 @@ nVisar::nVisar(neutrino *nparent, QString winname)
     my_w.sopPlot->yAxis2->setLabelColor(Qt::blue);
     my_w.sopPlot->yAxis2->setTickLabelColor(Qt::blue);
 
+    connect(my_w.sopPlot, SIGNAL(axisClick(QCPAxis*,QCPAxis::SelectablePart,QMouseEvent*)), this, SLOT(axisClick(QCPAxis*,QCPAxis::SelectablePart,QMouseEvent*)));
+    my_w.sopPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 
     //!END SOP stuff
     
@@ -112,6 +114,9 @@ nVisar::nVisar(neutrino *nparent, QString winname)
             obj->setObjectName(obj->objectName()+"-VISAR"+QString::number(k+1));
         }
 
+        connect(visar[k].plotPhaseIntensity, SIGNAL(axisClick(QCPAxis*,QCPAxis::SelectablePart,QMouseEvent*)), this, SLOT(axisClick(QCPAxis*,QCPAxis::SelectablePart,QMouseEvent*)));
+        visar[k].plotPhaseIntensity->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+
         visar[k].plotPhaseIntensity->yAxis2->setVisible(true);
 
         visar[k].plotPhaseIntensity->xAxis->setTickLabelFont(nparent->my_w.my_view->font());
@@ -123,18 +128,22 @@ nVisar::nVisar(neutrino *nparent, QString winname)
         visar[k].plotPhaseIntensity->yAxis2->setLabelFont(nparent->my_w.my_view->font());
 
         visar[k].plotPhaseIntensity->xAxis->setLabel(tr("Position [px]"));
+        visar[k].plotPhaseIntensity->xAxis->setLabelPadding(-1);
 
         visar[k].plotPhaseIntensity->yAxis->setLabel(tr("FringeShift"));
+        visar[k].plotPhaseIntensity->yAxis->setLabelPadding(-1);
         visar[k].plotPhaseIntensity->yAxis->setLabelColor(Qt::red);
         visar[k].plotPhaseIntensity->yAxis->setTickLabelColor(Qt::red);
 
         visar[k].plotPhaseIntensity->yAxis2->setLabel(tr("Intensity"));
+        visar[k].plotPhaseIntensity->yAxis2->setLabelPadding(-1);
         visar[k].plotPhaseIntensity->yAxis2->setLabelColor(Qt::blue);
         visar[k].plotPhaseIntensity->yAxis2->setTickLabelColor(Qt::blue);
 
 
         QCPAxis *myAxis = visar[k].plotPhaseIntensity->axisRect(0)->addAxis(QCPAxis::atRight,0);
         myAxis->setLabel(tr("Contrast"));
+        myAxis->setLabelPadding(-1);
         myAxis->setLabelColor(Qt::darkCyan);
         myAxis->setTickLabelColor(Qt::darkCyan);
         myAxis->setTickLabelFont(nparent->my_w.my_view->font());
@@ -169,7 +178,8 @@ nVisar::nVisar(neutrino *nparent, QString winname)
     my_w.plotVelocity->yAxis2->setLabelColor(Qt::blue);
     my_w.plotVelocity->yAxis2->setTickLabelColor(Qt::blue);
 
-
+    connect(my_w.plotVelocity, SIGNAL(axisClick(QCPAxis*,QCPAxis::SelectablePart,QMouseEvent*)), this, SLOT(axisClick(QCPAxis*,QCPAxis::SelectablePart,QMouseEvent*)));
+    my_w.plotVelocity->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 
     QCPAxis *myAxis = my_w.plotVelocity->axisRect(0)->addAxis(QCPAxis::atRight,0);
     myAxis->setLabel(tr("Quality"));
@@ -197,6 +207,20 @@ nVisar::nVisar(neutrino *nparent, QString winname)
     connections();
     my_w.tabs->setCurrentIndex(0);
 
+}
+
+void nVisar::axisClick(QCPAxis*ax,QCPAxis::SelectablePart,QMouseEvent*) {
+    DEBUG("Here");
+    QCustomPlot *plot=qobject_cast<QCustomPlot *>(sender());
+    if (plot) {
+        if (!ax->label().isEmpty()) {
+            statusBar()->showMessage("Zoom/Drag for "+ax->label(),5000);
+        }
+        plot->axisRect()->setRangeDragAxes(ax,ax);
+        plot->axisRect()->setRangeDrag(ax->orientation());
+        plot->axisRect()->setRangeZoomAxes(ax,ax);
+        plot->axisRect()->setRangeZoom(ax->orientation());
+    }
 }
 
 void nVisar::loadSettings(QString my_settings) {
@@ -638,7 +662,6 @@ void nVisar::updatePlot() {
                 pen.setColor(Qt::blue);
                 graph->setPen(pen);
                 graph->setData(time_vel[k],reflectivity[k]);
-
 
                 graph = my_w.plotVelocity->addGraph(my_w.plotVelocity->xAxis, my_w.plotVelocity->axisRect(0)->axis(QCPAxis::atRight,1));
                 pen.setColor(Qt::darkCyan);

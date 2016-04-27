@@ -242,12 +242,12 @@
         <property name="bottomMargin">
          <number>0</number>
         </property>
-        <item row="0" column="0" colspan="3">
-         <widget class="QGroupBox" name="groupBox">
+        <item row="2" column="0" colspan="2">
+         <widget class="QGroupBox" name="groupBox_8">
           <property name="title">
-           <string>Reference and Shot and offset</string>
+           <string>SOP calibration T0 A</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout_9" columnstretch="1,1,0">
+          <layout class="QGridLayout" name="gridLayout_14">
            <property name="leftMargin">
             <number>0</number>
            </property>
@@ -261,47 +261,49 @@
             <number>0</number>
            </property>
            <item row="0" column="0">
-            <widget class="QComboBox" name="sopRef">
+            <widget class="QDoubleSpinBox" name="sopCalibT0">
              <property name="font">
               <font>
                <pointsize>10</pointsize>
               </font>
              </property>
-             <property name="neutrinoImage" stdset="0">
+             <property name="decimals">
+              <number>7</number>
+             </property>
+             <property name="maximum">
+              <double>999999.989999999990687</double>
+             </property>
+             <property name="neutrinoSave" stdset="0">
               <bool>true</bool>
              </property>
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QComboBox" name="sopShot">
+            <widget class="QDoubleSpinBox" name="sopCalibA">
              <property name="font">
               <font>
                <pointsize>10</pointsize>
               </font>
              </property>
-             <property name="neutrinoImage" stdset="0">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QDoubleSpinBox" name="sopOffset">
-             <property name="toolTip">
-              <string>Background value</string>
-             </property>
-             <property name="suffix">
-              <string> [counts]</string>
+             <property name="decimals">
+              <number>7</number>
              </property>
              <property name="minimum">
-              <double>-99999999.989999994635582</double>
+              <double>-99999999.000000000000000</double>
              </property>
              <property name="maximum">
-              <double>99999999.989999994635582</double>
+              <double>99999999.000000000000000</double>
+             </property>
+             <property name="neutrinoSave" stdset="0">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
           </layout>
          </widget>
+        </item>
+        <item row="3" column="0" colspan="3">
+         <widget class="QCustomPlot" name="sopPlot" native="true"/>
         </item>
         <item row="1" column="0">
          <widget class="QGroupBox" name="groupBox_2">
@@ -501,12 +503,12 @@
           </layout>
          </widget>
         </item>
-        <item row="2" column="0" colspan="2">
-         <widget class="QGroupBox" name="groupBox_8">
+        <item row="0" column="0" colspan="3">
+         <widget class="QGroupBox" name="groupBox">
           <property name="title">
-           <string>SOP calibration T0 A</string>
+           <string>Reference and Shot and offset</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout_14">
+          <layout class="QGridLayout" name="gridLayout_9" columnstretch="1,1,0">
            <property name="leftMargin">
             <number>0</number>
            </property>
@@ -520,41 +522,42 @@
             <number>0</number>
            </property>
            <item row="0" column="0">
-            <widget class="QDoubleSpinBox" name="sopCalibT0">
+            <widget class="QComboBox" name="sopRef">
              <property name="font">
               <font>
                <pointsize>10</pointsize>
               </font>
              </property>
-             <property name="decimals">
-              <number>7</number>
-             </property>
-             <property name="maximum">
-              <double>999999.989999999990687</double>
-             </property>
-             <property name="neutrinoSave" stdset="0">
+             <property name="neutrinoImage" stdset="0">
               <bool>true</bool>
              </property>
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QDoubleSpinBox" name="sopCalibA">
+            <widget class="QComboBox" name="sopShot">
              <property name="font">
               <font>
                <pointsize>10</pointsize>
               </font>
              </property>
-             <property name="decimals">
-              <number>7</number>
+             <property name="neutrinoImage" stdset="0">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QDoubleSpinBox" name="sopOffset">
+             <property name="toolTip">
+              <string>Background value</string>
+             </property>
+             <property name="suffix">
+              <string> [counts]</string>
              </property>
              <property name="minimum">
-              <double>-99999999.000000000000000</double>
+              <double>-99999999.989999994635582</double>
              </property>
              <property name="maximum">
-              <double>99999999.000000000000000</double>
-             </property>
-             <property name="neutrinoSave" stdset="0">
-              <bool>true</bool>
+              <double>99999999.989999994635582</double>
              </property>
             </widget>
            </item>
@@ -588,9 +591,6 @@
            </item>
           </layout>
          </widget>
-        </item>
-        <item row="3" column="0" colspan="3">
-         <widget class="QCustomPlot" name="sopPlot" native="true"/>
         </item>
        </layout>
       </widget>

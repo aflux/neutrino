@@ -56,6 +56,11 @@ nFindPeaks::nFindPeaks(neutrino *nparent, QString winname)
     my_w.plot->xAxis->setTickLabelFont(nparent->my_w.my_view->font());
     my_w.plot->yAxis->setTickLabelFont(nparent->my_w.my_view->font());
 
+    my_w.plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+
+    my_w.plot->xAxis->setLabelPadding(-1);
+    my_w.plot->yAxis->setLabelPadding(-1);
+
     my_cursor=new QCPItemLine(my_w.plot);
 
 	decorate();
