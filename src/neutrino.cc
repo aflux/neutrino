@@ -2223,9 +2223,15 @@ nGenericPan* neutrino::newPan(QString my_string) {
     const QMetaObject* metaObject = this->metaObject();
 
     for(int i = metaObject->methodOffset(); i < metaObject->methodCount(); ++i) {
+	QString name;
+#ifdef USE_QT5
+	name=metaObject->method(i).name();
+#else
+	name=QString::fromLatin1(metaObject->method(i).signature());
+#endif
         if (!strcmp(metaObject->method(i).typeName(),"nGenericPan*") &&
             metaObject->method(i).parameterTypes().empty() &&
-            QString::fromLatin1(metaObject->method(i).name())==my_string+"()") {
+            name==my_string+"()") {
             QMetaObject::invokeMethod(this,my_string.toLatin1().constData(),Q_RETURN_ARG(nGenericPan*, my_pan));
         }
     }

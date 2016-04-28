@@ -107,8 +107,7 @@ else()
 	# qt4
 	SET (USE_QT4 True)
 	message(STATUS "Qt5 not found, searching for Qt4 instead")
-	find_package(Qt4 4.7.0 COMPONENTS QtMain QtCore QtGui QtSQL QtSvg REQUIRED)
-	include(UseQt4)
+	find_package(Qt4 4.7.0 COMPONENTS QtMain QtCore QtGui QtSQL QtSvg QtUiTools REQUIRED)
 	include(${QT_USE_FILE})
 	
 	add_definitions(-DUSE_QT4)
