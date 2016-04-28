@@ -51,8 +51,6 @@ nLineoutBoth::nLineoutBoth(neutrino *parent, QString win_name)
         }
     }
 
-    my_w.plot->yAxis->setRangeReversed(true);
-
     decorate();
 	updateLastPoint();
     

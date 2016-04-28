@@ -30,7 +30,6 @@
 #include <QGraphicsObject>
 #include "nPhysImageF.h"
 #include "ui_nLine.h"
-#include "qcustomplot.h"
 
 class neutrino;
 

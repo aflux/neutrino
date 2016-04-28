@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>nVisar</class>
- <widget class="QMainWindow" name="nVisar">
+ <class>nVISAR1</class>
+ <widget class="QMainWindow" name="nVISAR1">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -53,7 +53,7 @@
        <enum>QTabWidget::West</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <property name="neutrinoSave" stdset="0">
        <bool>true</bool>
@@ -81,7 +81,7 @@
            <enum>QTabWidget::North</enum>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <property name="neutrinoSave" stdset="0">
            <bool>true</bool>
@@ -801,7 +801,7 @@
   <customwidget>
    <class>nVisarPlot</class>
    <extends>QWidget</extends>
-   <header>nCustomPlots.h</header>
+   <header>nVisar.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

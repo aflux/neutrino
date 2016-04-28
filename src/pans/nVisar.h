@@ -22,22 +22,33 @@
  *	Tommaso Vinci <tommaso.vinci@polytechnique.edu>
  *
  */
+#ifndef __nVisar
+#define __nVisar
+
 #include <QtGui>
 #include <QWidget>
 
 #include "nGenericPan.h"
+
+#include "nCustomPlots.h"
+class nVisarPlot : public nCustomPlotMouseX {
+    Q_OBJECT
+public:
+    nVisarPlot(QWidget*);
+    QCPAxis *yAxis3;
+};
+
 #include "ui_nVISAR1.h"
 #include "ui_nVISAR2.h"
 #include "ui_nVISAR3.h"
 
-#ifndef __nVisar
-#define __nVisar
-
 #include "nPhysWave.h"
+
 
 class neutrino;
 class nLine;
 class nRect;
+
 
 template<class T>
 inline T SIGN(T x) { return (x > 0) ? 1 : ((x < 0) ? -1 : 0); }
@@ -50,7 +61,7 @@ class nVisar : public nGenericPan {
 public:
 
     nVisar(neutrino *, QString);
-    Ui::nVisar my_w;
+    Ui::nVISAR1 my_w;
 
     Ui::nVISAR2 visar[2];
     Ui::nVISAR3 setvisar[2];
@@ -112,5 +123,6 @@ private:
     QPointer<nRect> fringeRect[2];
     QPointer<nRect> sopRect;
 };
+
 
 #endif

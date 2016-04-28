@@ -82,16 +82,5 @@ public:
 };
 
 
-//VISAR
-class nVisarPlot : public nCustomPlotMouseX {
-    Q_OBJECT
-
-public:
-    nVisarPlot(QWidget*);
-
-    QCPAxis *yAxis3;
-
-};
-
 #endif // nCustomPlots_H
 
