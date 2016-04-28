@@ -48,8 +48,12 @@ nCustomPlot::nCustomPlot(QWidget* parent):
                 axis->setTickLabelFont(fontTmp);
                 axis->setLabelFont(fontTmp);
             }
+            legend->setFont(fontTmp);
         }
     }
+
+    axisRect()->setRangeDrag(0);
+    axisRect()->setRangeZoom(0);
 
 }
 

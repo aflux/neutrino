@@ -23,7 +23,6 @@
  *
  */
 #include "nCompareLines.h"
-#include "qcustomplot.h"
 
 nCompareLines::nCompareLines(neutrino *nparent, QString winname)
 : nGenericPan(nparent, winname)
@@ -53,19 +52,9 @@ nCompareLines::nCompareLines(neutrino *nparent, QString winname)
 	connect(nparent, SIGNAL(physDel(nPhysD*)), this, SLOT(physDel(nPhysD*)));
 	connect(nparent, SIGNAL(physMod(std::pair<nPhysD*,nPhysD*>)), this, SLOT(physMod(std::pair<nPhysD*,nPhysD*>)));
     
-    my_w.plot->xAxis->setTickLabelFont(nparent->my_w.my_view->font());
-    my_w.plot->yAxis->setTickLabelFont(nparent->my_w.my_view->font());
-    my_w.plot->xAxis->setLabelFont(nparent->my_w.my_view->font());
-    my_w.plot->yAxis->setLabelFont(nparent->my_w.my_view->font());
     my_w.plot->xAxis->setLabel(tr("Distance"));
     my_w.plot->yAxis->setLabel(tr("Value"));
-//    my_w.plot->legend->setVisible(true);
-    my_w.plot->legend->setFont(nparent->my_w.my_view->font());
 	
-    my_w.plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
-    my_w.plot->xAxis->setLabelPadding(-1);
-    my_w.plot->yAxis->setLabelPadding(-1);
-
 	decorate();
 	loadDefaults();
 	connect(line, SIGNAL(sceneChanged()), this, SLOT(sceneChanged()));
