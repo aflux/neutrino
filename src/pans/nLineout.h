@@ -35,7 +35,6 @@
 #include "nPhysImageF.h"
 #include "nPhysMaths.h"
 
-#include "qcustomplot.h"
 #include "neutrino.h"
 
 class nLineout : public nGenericPan {
@@ -54,8 +53,6 @@ public slots:
 	
 private:
 	Ui::nLineout my_w;
-	
-    QPointer<QCPItemLine> my_cursor;
 	
 	enum phys_direction cut_dir;
 	

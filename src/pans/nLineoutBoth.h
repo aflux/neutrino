@@ -31,8 +31,6 @@
 #include "nGenericPan.h"
 #include "ui_nLineoutBoth.h"
 
-#include "qcustomplot.h"
-
 class nLineoutBoth : public nGenericPan {
 	Q_OBJECT
 public:
@@ -42,11 +40,9 @@ public slots:
 	void updatePlot(QPointF);
     void setBehaviour();
 	void updateLastPoint();
-    void axisClick(QCPAxis*,QCPAxis::SelectablePart,QMouseEvent*);
 
 private:
 	Ui::nLineoutBoth my_w;
-    QPointer<QCPItemLine> my_cursor[2];
 };
 
 #endif

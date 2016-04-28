@@ -39,8 +39,51 @@ public slots:
 
 };
 
+//plot with mouse (vertical)
+class nCustomPlotMouseX : public nCustomPlot {
+    Q_OBJECT
 
-class nVisarPlot : public nCustomPlot {
+public:
+    nCustomPlotMouseX(QWidget*);
+
+private:
+    QCPItemLine mouseMarker;
+
+public slots:
+    void setMousePosition(double);
+
+};
+
+
+//plot with mouse (horizontal and vertical)
+class nCustomPlotMouseXY : public nCustomPlot {
+    Q_OBJECT
+
+public:
+    nCustomPlotMouseXY(QWidget*);
+
+private:
+    QCPItemLine mouseMarkerX;
+    QCPItemLine mouseMarkerY;
+
+public slots:
+    void setMousePosition(double,double);
+
+};
+
+
+//plot with mouse (horizontal and vertical) and two curves (x,y) and (x2,y2)
+class nCustomDoublePlot : public nCustomPlotMouseXY {
+    Q_OBJECT
+
+public:
+    nCustomDoublePlot(QWidget*);
+
+};
+
+
+//VISAR
+class nVisarPlot : public nCustomPlotMouseX {
     Q_OBJECT
 
 public:
@@ -48,11 +91,6 @@ public:
 
     QCPAxis *yAxis3;
 
-private:
-    QCPItemLine mouseMarker;
-
-public slots:
-    void setMousePosition(double);
 };
 
 #endif // nCustomPlots_H

@@ -37,7 +37,7 @@
      <number>4</number>
     </property>
     <item row="0" column="0" colspan="2">
-     <widget class="QCustomPlot" name="plot" native="true"/>
+     <widget class="nCustomPlotMouseX" name="plot" native="true"/>
     </item>
    </layout>
   </widget>
@@ -177,9 +177,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QCustomPlot</class>
+   <class>nCustomPlotMouseX</class>
    <extends>QWidget</extends>
-   <header>qcustomplot.h</header>
+   <header>nCustomPlots.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

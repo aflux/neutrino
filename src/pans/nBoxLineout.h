@@ -32,7 +32,6 @@
 #define __nBoxLineout
 
 #include "neutrino.h"
-#include "qcustomplot.h"
 
 class nRect;
 
@@ -59,11 +58,7 @@ public:
 
 	void sceneChanged();
 
-    void axisClick(QCPAxis*,QCPAxis::SelectablePart,QMouseEvent*);
-
 private:
-
-    QPointer<QCPItemLine> my_cursor[2];
 
     QPointer<nRect> box;
 };

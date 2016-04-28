@@ -31,7 +31,6 @@
 #include "nGenericPan.h"
 #include "ui_nFindPeaks.h"
 #include "neutrino.h"
-#include "qcustomplot.h"
 
 class nRect;
 
@@ -60,7 +59,6 @@ public:
 	
 private:
     QPointer<nRect> box;
-    QPointer<QCPItemLine> my_cursor;
 };
 
 #endif

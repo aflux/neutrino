@@ -53,14 +53,6 @@ nFindPeaks::nFindPeaks(neutrino *nparent, QString winname)
 
     my_w.plot->addGraph(my_w.plot->xAxis, my_w.plot->yAxis);
     my_w.plot->graph(0)->setPen(QPen(Qt::blue));
-    my_w.plot->xAxis->setTickLabelFont(nparent->my_w.my_view->font());
-    my_w.plot->yAxis->setTickLabelFont(nparent->my_w.my_view->font());
-
-    my_w.plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
-    my_w.plot->xAxis->setLabelPadding(-1);
-    my_w.plot->yAxis->setLabelPadding(-1);
-
-    my_cursor=new QCPItemLine(my_w.plot);
 
 	decorate();
 	loadDefaults();
@@ -112,21 +104,12 @@ void nFindPeaks::setScale() {
 
 void nFindPeaks::mouseAtMatrix(QPointF p) {
 	if (currentBuffer) {
-        QPen marker_pen;
-        marker_pen.setColor(nparent->my_mouse.color);
-
-        my_cursor->setPen(marker_pen);
-
         if (my_w.direction->currentIndex()==0) {
-            my_cursor->start->setCoords( p.x(), QCPRange::minRange);
-            my_cursor->end->setCoords( p.x(), QCPRange::maxRange);
+            my_w.plot->setMousePosition(p.x());
         } else {
-            my_cursor->start->setCoords(QCPRange::minRange, p.y());
-            my_cursor->end->setCoords(QCPRange::maxRange, p.y());
+            my_w.plot->setMousePosition(p.y());
         }
-
-		my_w.plot->replot();
-	}
+    }
 }
 
 void nFindPeaks::updatePlot() {

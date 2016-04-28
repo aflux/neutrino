@@ -41,13 +41,6 @@ nLineout::nLineout(neutrino *parent, QString win_name, enum phys_direction plot_
     my_w.plot->addGraph(my_w.plot->xAxis, my_w.plot->yAxis);
     my_w.plot->graph(0)->setPen(QPen(Qt::black));
 
-    my_cursor=new QCPItemLine(my_w.plot);
-
-    my_w.plot->xAxis->setTickLabelFont(nparent->my_w.my_view->font());
-    my_w.plot->yAxis->setTickLabelFont(nparent->my_w.my_view->font());
-
-    my_w.plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
-
     decorate();
     updateLastPoint();
 }
@@ -104,10 +97,6 @@ nLineout::updatePlot(QPointF p) {
                 y[i]=currentBuffer->point(b_p[(k+1)%2],i+lat_skip);
             }
         }
-
-        my_cursor->start->setCoords(b_p[k], QCPRange::minRange);
-        my_cursor->end->setCoords(b_p[k], QCPRange::maxRange);
-
         my_w.plot->graph(0)->setData(x,y);
         my_w.plot->graph(0)->keyAxis()->setRange(x.first(), x.last());
 
@@ -122,7 +111,8 @@ nLineout::updatePlot(QPointF p) {
             }
         }
         statusBar()->showMessage(tr("Point (")+QString::number(p.x())+","+QString::number(p.y())+")="+QString::number(currentBuffer->point(p.x(),p.y())));
-        my_w.plot->replot();
+
+        my_w.plot->setMousePosition(b_p[k]);
     }
 
 }

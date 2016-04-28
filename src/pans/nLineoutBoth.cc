@@ -44,64 +44,14 @@ nLineoutBoth::nLineoutBoth(neutrino *parent, QString win_name)
 
     connect(my_w.autoScale, SIGNAL(toggled(bool)), my_w.lockColors, SLOT(setEnabled(bool)));
 
-
-    my_w.plot->addGraph(my_w.plot->xAxis, my_w.plot->yAxis2);
-    my_w.plot->graph(0)->setPen(QPen(Qt::red));
-    my_w.plot->addGraph(my_w.plot->yAxis, my_w.plot->xAxis2);
-    my_w.plot->graph(1)->setPen(QPen(Qt::blue));
-
     for (int k=0;k<2;k++) {
-        my_cursor[k]=new QCPItemLine(my_w.plot);
         if (currentBuffer) {
             my_w.plot->graph(k)->keyAxis()->setRange(currentBuffer->getW(),currentBuffer->getH());
             my_w.plot->graph(k)->valueAxis()->setRange(currentBuffer->get_min(),currentBuffer->get_max());
         }
     }
 
-    my_w.plot->xAxis2->setVisible(true);
-    my_w.plot->yAxis2->setVisible(true);
-
     my_w.plot->yAxis->setRangeReversed(true);
-
-
-    my_w.plot->xAxis->setTickLabelFont(nparent->my_w.my_view->font());
-    my_w.plot->yAxis->setTickLabelFont(nparent->my_w.my_view->font());
-    my_w.plot->xAxis2->setTickLabelFont(nparent->my_w.my_view->font());
-    my_w.plot->yAxis2->setTickLabelFont(nparent->my_w.my_view->font());
-
-    my_w.plot->xAxis->setLabel(tr("X"));
-    my_w.plot->xAxis->setLabelPadding(-1);
-    my_w.plot->xAxis->setLabelColor(Qt::red);
-    my_w.plot->xAxis->setTickLabelColor(Qt::red);
-    my_w.plot->yAxis2->setLabel(tr("X value"));
-    my_w.plot->yAxis2->setLabelPadding(-1);
-    my_w.plot->yAxis2->setLabelColor(Qt::red);
-    my_w.plot->yAxis2->setTickLabelColor(Qt::red);
-    my_w.plot->yAxis->setLabel(tr("Y"));
-    my_w.plot->yAxis->setLabelPadding(-1);
-    my_w.plot->yAxis->setLabelColor(Qt::blue);
-    my_w.plot->yAxis->setTickLabelColor(Qt::blue);
-    my_w.plot->xAxis2->setLabel(tr("Y value"));
-    my_w.plot->xAxis2->setLabelColor(Qt::blue);
-    my_w.plot->xAxis2->setTickLabelColor(Qt::blue);
-    my_w.plot->xAxis2->setLabelPadding(-1);
-
-    my_w.plot->xAxis->setSelectableParts(QCPAxis::spAxis);
-    my_w.plot->yAxis->setSelectableParts(QCPAxis::spAxis);
-    my_w.plot->xAxis2->setSelectableParts(QCPAxis::spAxis);
-    my_w.plot->yAxis2->setSelectableParts(QCPAxis::spAxis);
-
-    connect(my_w.plot, SIGNAL(axisClick(QCPAxis*,QCPAxis::SelectablePart,QMouseEvent*)), this, SLOT(axisClick(QCPAxis*,QCPAxis::SelectablePart,QMouseEvent*)));
-
-    my_w.plot->xAxis->setLabelFont(nparent->my_w.my_view->font());
-    my_w.plot->yAxis->setLabelFont(nparent->my_w.my_view->font());
-    my_w.plot->xAxis2->setLabelFont(nparent->my_w.my_view->font());
-    my_w.plot->yAxis2->setLabelFont(nparent->my_w.my_view->font());
-
-    my_w.plot->axisRect()->setRangeDrag(0);
-    my_w.plot->axisRect()->setRangeZoom(0);
-
-    my_w.plot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 
     decorate();
 	updateLastPoint();
@@ -116,17 +66,6 @@ void nLineoutBoth::setBehaviour() {
         disconnect(nparent->my_w.my_view, SIGNAL(mousePressEvent_sig(QPointF)), this, SLOT(updatePlot(QPointF)));
         connect(nparent->my_w.my_view, SIGNAL(mouseposition(QPointF)), this, SLOT(updatePlot(QPointF)));
     }
-}
-
-void nLineoutBoth::axisClick(QCPAxis*ax,QCPAxis::SelectablePart,QMouseEvent*) {
-    DEBUG("Here");
-    if (!ax->label().isEmpty()) {
-        statusBar()->showMessage("Zoom/Drag for "+ax->label(),5000);
-    }
-    my_w.plot->axisRect()->setRangeDragAxes(ax,ax);
-    my_w.plot->axisRect()->setRangeDrag(ax->orientation());
-    my_w.plot->axisRect()->setRangeZoomAxes(ax,ax);
-    my_w.plot->axisRect()->setRangeZoom(ax->orientation());
 }
 
 void nLineoutBoth::updatePlot(QPointF p) {
@@ -156,14 +95,10 @@ void nLineoutBoth::updatePlot(QPointF p) {
                 for (unsigned int i=0;i<z_size;i++){
                     y[i]=currentBuffer->point(i+lat_skip,b_p[(k+1)%2]);
                 }
-                my_cursor[k]->start->setCoords( p.x(), QCPRange::minRange);
-                my_cursor[k]->end->setCoords( p.x(), QCPRange::maxRange);
             } else {
                 for (unsigned int i=0;i<z_size;i++){
                     y[i]=currentBuffer->point(b_p[(k+1)%2],i+lat_skip);
                 }
-                my_cursor[k]->start->setCoords(QCPRange::minRange, p.y());
-                my_cursor[k]->end->setCoords(QCPRange::maxRange, p.y());
             }
             my_w.plot->graph(k)->setData(x,y);
 
@@ -180,6 +115,8 @@ void nLineoutBoth::updatePlot(QPointF p) {
                     my_w.plot->graph(k)->valueAxis()->setRange(rang.x(),rang.y());
                 }
             }
+
+            my_w.plot->setMousePosition(p.x(),p.y());
         }
 
 

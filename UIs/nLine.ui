@@ -44,7 +44,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="General">
        <attribute name="title">
@@ -452,7 +452,7 @@
          <number>0</number>
         </property>
         <item row="0" column="0">
-         <widget class="QCustomPlot" name="plot" native="true"/>
+         <widget class="nCustomPlot" name="plot" native="true"/>
         </item>
        </layout>
       </widget>
@@ -586,9 +586,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QCustomPlot</class>
+   <class>nCustomPlot</class>
    <extends>QWidget</extends>
-   <header>qcustomplot.h</header>
+   <header>nCustomPlots.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
