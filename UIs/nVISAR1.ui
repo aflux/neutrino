@@ -221,7 +221,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QCustomPlot" name="plotVelocity" native="true"/>
+         <widget class="nVisarPlot" name="plotVelocity" native="true"/>
         </item>
        </layout>
       </widget>
@@ -303,7 +303,7 @@
          </widget>
         </item>
         <item row="3" column="0" colspan="3">
-         <widget class="QCustomPlot" name="sopPlot" native="true"/>
+         <widget class="nVisarPlot" name="sopPlot" native="true"/>
         </item>
         <item row="1" column="0">
          <widget class="QGroupBox" name="groupBox_2">
@@ -799,9 +799,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QCustomPlot</class>
+   <class>nVisarPlot</class>
    <extends>QWidget</extends>
-   <header>qcustomplot.h</header>
+   <header>nCustomPlots.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

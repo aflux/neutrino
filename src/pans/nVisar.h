@@ -92,8 +92,6 @@ public slots:
 
     void bufferChanged(nPhysD*);
 
-    void axisClick(QCPAxis*,QCPAxis::SelectablePart,QMouseEvent*);
-
     
 private:
 
@@ -105,8 +103,6 @@ private:
 
     QVector<double> sopCurve[4];
     QVector<double> time_sop;
-
-    QPointer<QCPItemLine> mouseMarker[4];
 
     nPhysD phase[2][2];
     nPhysD contrast[2][2];

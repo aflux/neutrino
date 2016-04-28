@@ -59,6 +59,8 @@ public:
 
 	void sceneChanged();
 
+    void axisClick(QCPAxis*,QCPAxis::SelectablePart,QMouseEvent*);
+
 private:
 
     QPointer<QCPItemLine> my_cursor[2];

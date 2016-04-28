@@ -1,7 +1,7 @@
 /*
  *
  *    Copyright (C) 2013 Alessandro Flacco, Tommaso Vinci All Rights Reserved
- * 
+ *
  *    This file is part of neutrino.
  *
  *    Neutrino is free software: you can redistribute it and/or modify
@@ -17,46 +17,43 @@
  *    You should have received a copy of the GNU Lesser General Public License
  *    along with neutrino.  If not, see <http://www.gnu.org/licenses/>.
  *
- *    Contact Information: 
+ *    Contact Information:
  *	Alessandro Flacco <alessandro.flacco@polytechnique.edu>
  *	Tommaso Vinci <tommaso.vinci@polytechnique.edu>
  *
  */
-#ifndef nApp_H
-#define nApp_H
+#ifndef nCustomPlots_H
+#define nCustomPlots_H
 
-#include <QApplication>
-#include <QtGui>
-#include "neutrino.h"
+#include "qcustomplot.h"
 
-class NApplication : public QApplication {
+
+class nCustomPlot : public QCustomPlot {
     Q_OBJECT
+
 public:
-	NApplication( int &argc, char **argv ) : QApplication(argc, argv) {}
-protected:
+    nCustomPlot(QWidget*);
 
-	virtual bool notify(QObject *rec, QEvent *ev)
-	{
-		try {
-			return QApplication::notify(rec, ev);
-		}
-		catch (std::exception &e) {
-            QMessageBox dlg(QMessageBox::Critical, tr("Exception"), e.what());
-            dlg.setWindowFlags(dlg.windowFlags() | Qt::WindowStaysOnTopHint);
-            dlg.exec();
-
-//			qCritical() << "neutrino got exception: "<<e.what();
-		}
-
-		return false;
-	}
-
-    bool event(QEvent *ev);
-
-#ifdef HAVE_PYTHONQT
 public slots:
-    QList<neutrino*> neus();
-#endif
+    void my_axisClick(QCPAxis*,QCPAxis::SelectablePart,QMouseEvent*);
+
 };
-#endif
+
+
+class nVisarPlot : public nCustomPlot {
+    Q_OBJECT
+
+public:
+    nVisarPlot(QWidget*);
+
+    QCPAxis *yAxis3;
+
+private:
+    QCPItemLine mouseMarker;
+
+public slots:
+    void setMousePosition(double);
+};
+
+#endif // nCustomPlots_H
 

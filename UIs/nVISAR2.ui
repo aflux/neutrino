@@ -390,15 +390,15 @@
     </widget>
    </item>
    <item>
-    <widget class="QCustomPlot" name="plotPhaseIntensity" native="true"/>
+    <widget class="nVisarPlot" name="plotPhaseIntensity" native="true"/>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QCustomPlot</class>
+   <class>nVisarPlot</class>
    <extends>QWidget</extends>
-   <header>qcustomplot.h</header>
+   <header>nCustomPlots.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

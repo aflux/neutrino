@@ -72,28 +72,10 @@ nVisar::nVisar(neutrino *nparent, QString winname)
 
 
 
-    my_w.sopPlot->yAxis2->setVisible(true);
-
-    my_w.sopPlot->xAxis->setTickLabelFont(nparent->my_w.my_view->font());
-    my_w.sopPlot->yAxis->setTickLabelFont(nparent->my_w.my_view->font());
-    my_w.sopPlot->yAxis2->setTickLabelFont(nparent->my_w.my_view->font());
-
-    my_w.sopPlot->xAxis->setLabelFont(nparent->my_w.my_view->font());
-    my_w.sopPlot->yAxis->setLabelFont(nparent->my_w.my_view->font());
-    my_w.sopPlot->yAxis2->setLabelFont(nparent->my_w.my_view->font());
-
+    my_w.sopPlot->yAxis3->setVisible(false);
     my_w.sopPlot->xAxis->setLabel(tr("Time"));
-
     my_w.sopPlot->yAxis->setLabel(tr("Counts"));
-    my_w.sopPlot->yAxis->setLabelColor(Qt::red);
-    my_w.sopPlot->yAxis->setTickLabelColor(Qt::red);
-
     my_w.sopPlot->yAxis2->setLabel(tr("Temperature"));
-    my_w.sopPlot->yAxis2->setLabelColor(Qt::blue);
-    my_w.sopPlot->yAxis2->setTickLabelColor(Qt::blue);
-
-    connect(my_w.sopPlot, SIGNAL(axisClick(QCPAxis*,QCPAxis::SelectablePart,QMouseEvent*)), this, SLOT(axisClick(QCPAxis*,QCPAxis::SelectablePart,QMouseEvent*)));
-    my_w.sopPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 
     //!END SOP stuff
     
@@ -114,82 +96,22 @@ nVisar::nVisar(neutrino *nparent, QString winname)
             obj->setObjectName(obj->objectName()+"-VISAR"+QString::number(k+1));
         }
 
-        connect(visar[k].plotPhaseIntensity, SIGNAL(axisClick(QCPAxis*,QCPAxis::SelectablePart,QMouseEvent*)), this, SLOT(axisClick(QCPAxis*,QCPAxis::SelectablePart,QMouseEvent*)));
-        visar[k].plotPhaseIntensity->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
-
-        visar[k].plotPhaseIntensity->yAxis2->setVisible(true);
-
-        visar[k].plotPhaseIntensity->xAxis->setTickLabelFont(nparent->my_w.my_view->font());
-        visar[k].plotPhaseIntensity->yAxis->setTickLabelFont(nparent->my_w.my_view->font());
-        visar[k].plotPhaseIntensity->yAxis2->setTickLabelFont(nparent->my_w.my_view->font());
-
-        visar[k].plotPhaseIntensity->xAxis->setLabelFont(nparent->my_w.my_view->font());
-        visar[k].plotPhaseIntensity->yAxis->setLabelFont(nparent->my_w.my_view->font());
-        visar[k].plotPhaseIntensity->yAxis2->setLabelFont(nparent->my_w.my_view->font());
-
         visar[k].plotPhaseIntensity->xAxis->setLabel(tr("Position [px]"));
-        visar[k].plotPhaseIntensity->xAxis->setLabelPadding(-1);
-
         visar[k].plotPhaseIntensity->yAxis->setLabel(tr("FringeShift"));
-        visar[k].plotPhaseIntensity->yAxis->setLabelPadding(-1);
-        visar[k].plotPhaseIntensity->yAxis->setLabelColor(Qt::red);
-        visar[k].plotPhaseIntensity->yAxis->setTickLabelColor(Qt::red);
-
         visar[k].plotPhaseIntensity->yAxis2->setLabel(tr("Intensity"));
-        visar[k].plotPhaseIntensity->yAxis2->setLabelPadding(-1);
-        visar[k].plotPhaseIntensity->yAxis2->setLabelColor(Qt::blue);
-        visar[k].plotPhaseIntensity->yAxis2->setTickLabelColor(Qt::blue);
-
-
-        QCPAxis *myAxis = visar[k].plotPhaseIntensity->axisRect(0)->addAxis(QCPAxis::atRight,0);
-        myAxis->setLabel(tr("Contrast"));
-        myAxis->setLabelPadding(-1);
-        myAxis->setLabelColor(Qt::darkCyan);
-        myAxis->setTickLabelColor(Qt::darkCyan);
-        myAxis->setTickLabelFont(nparent->my_w.my_view->font());
-        myAxis->setLabelFont(nparent->my_w.my_view->font());
-
+        visar[k].plotPhaseIntensity->yAxis3->setLabel(tr("Contrast"));
 
         visar[k].guess->setProperty("id", k);
         visar[k].doWaveButton->setProperty("id", k);
         setvisar[k].physScale->setProperty("id", k);
 
-        mouseMarker[k]=new QCPItemLine(visar[k].plotPhaseIntensity);
     }
 
 
-    my_w.plotVelocity->yAxis2->setVisible(true);
-
-    my_w.plotVelocity->xAxis->setTickLabelFont(nparent->my_w.my_view->font());
-    my_w.plotVelocity->yAxis->setTickLabelFont(nparent->my_w.my_view->font());
-    my_w.plotVelocity->yAxis2->setTickLabelFont(nparent->my_w.my_view->font());
-
-    my_w.plotVelocity->xAxis->setLabelFont(nparent->my_w.my_view->font());
-    my_w.plotVelocity->yAxis->setLabelFont(nparent->my_w.my_view->font());
-    my_w.plotVelocity->yAxis2->setLabelFont(nparent->my_w.my_view->font());
-
     my_w.plotVelocity->xAxis->setLabel(tr("Position [time]"));
-
     my_w.plotVelocity->yAxis->setLabel(tr("Velocity"));
-    my_w.plotVelocity->yAxis->setLabelColor(Qt::red);
-    my_w.plotVelocity->yAxis->setTickLabelColor(Qt::red);
-
     my_w.plotVelocity->yAxis2->setLabel(tr("Reflectivity"));
-    my_w.plotVelocity->yAxis2->setLabelColor(Qt::blue);
-    my_w.plotVelocity->yAxis2->setTickLabelColor(Qt::blue);
-
-    connect(my_w.plotVelocity, SIGNAL(axisClick(QCPAxis*,QCPAxis::SelectablePart,QMouseEvent*)), this, SLOT(axisClick(QCPAxis*,QCPAxis::SelectablePart,QMouseEvent*)));
-    my_w.plotVelocity->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
-
-    QCPAxis *myAxis = my_w.plotVelocity->axisRect(0)->addAxis(QCPAxis::atRight,0);
-    myAxis->setLabel(tr("Quality"));
-    myAxis->setLabelColor(Qt::darkCyan);
-    myAxis->setTickLabelColor(Qt::darkCyan);
-    myAxis->setTickLabelFont(nparent->my_w.my_view->font());
-    myAxis->setLabelFont(nparent->my_w.my_view->font());
-
-    mouseMarker[2]=new QCPItemLine(my_w.plotVelocity);
-    mouseMarker[3]=new QCPItemLine(my_w.sopPlot);
+    my_w.plotVelocity->yAxis3->setLabel(tr("Quality"));
 
     for (int k=0;k<2;k++){
         for (int m=0;m<2;m++){
@@ -209,20 +131,6 @@ nVisar::nVisar(neutrino *nparent, QString winname)
 
 }
 
-void nVisar::axisClick(QCPAxis*ax,QCPAxis::SelectablePart,QMouseEvent*) {
-    DEBUG("Here");
-    QCustomPlot *plot=qobject_cast<QCustomPlot *>(sender());
-    if (plot) {
-        if (!ax->label().isEmpty()) {
-            statusBar()->showMessage("Zoom/Drag for "+ax->label(),5000);
-        }
-        plot->axisRect()->setRangeDragAxes(ax,ax);
-        plot->axisRect()->setRangeDrag(ax->orientation());
-        plot->axisRect()->setRangeZoomAxes(ax,ax);
-        plot->axisRect()->setRangeZoom(ax->orientation());
-    }
-}
-
 void nVisar::loadSettings(QString my_settings) {
     nGenericPan::loadSettings(my_settings);
     QApplication::processEvents();
@@ -237,20 +145,14 @@ void nVisar::mouseAtMatrix(QPointF p) {
     if (my_w.tabs->currentIndex()==0) {
         k=my_w.tabPhase->currentIndex();
         position=(direction(k)==0) ? p.y() : p.x();
-        mouseMarker[k]->start->setCoords(position, QCPRange::minRange);
-        mouseMarker[k]->end->setCoords(position, QCPRange::maxRange);
-        visar[k].plotPhaseIntensity->replot();
+        visar[k].plotPhaseIntensity->setMousePosition(position);
     } else if (my_w.tabs->currentIndex()==1) {
         k=my_w.tabVelocity->currentIndex();
         position=((direction(k)==0 ? p.y() : p.x() )-setvisar[k].physOrigin->value())*setvisar[k].physScale->value()+setvisar[k].offsetTime->value();
-        mouseMarker[2]->start->setCoords(position, QCPRange::minRange);
-        mouseMarker[2]->end->setCoords(position, QCPRange::maxRange);
-        my_w.plotVelocity->replot();
+        my_w.plotVelocity->setMousePosition(position);
     } else {
         position=((my_w.sopDirection->currentIndex()==0 ? p.y() : p.x() )-my_w.sopOrigin->value())*my_w.sopScale->value()+my_w.sopTimeOffset->value();
-        mouseMarker[3]->start->setCoords(position, QCPRange::minRange);
-        mouseMarker[3]->end->setCoords(position, QCPRange::maxRange);
-        my_w.sopPlot->replot();
+        my_w.sopPlot->setMousePosition(position);
     }
     my_w.statusbar->showMessage("Postion : "+QString::number(position));
 }
