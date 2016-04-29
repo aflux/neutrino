@@ -105,7 +105,7 @@ if (LINUX)
 
     execute_process(COMMAND "lsb_release -is" OUTPUT_VARIABLE DISTRO)
 
-    if (${DISTRO} STREQUAL "Debian")
+    if (DISTRO STREQUAL "Debian")
 
 	message (STATUS "Using CPackDeb for packaging")
 
