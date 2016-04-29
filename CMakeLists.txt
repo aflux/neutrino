@@ -99,9 +99,15 @@ if (WIN32)
 
 endif()
 
-if (DEBIAN)
-	message (STATUS "Using CPackDeb for packaging")
 
+
+if (LINUX)
+
+    execute_process(COMMAND "lsb_release -is" OUTPUT_VARIABLE DISTRO)
+
+    if (${DISTRO} STREQUAL "Debian")
+
+	message (STATUS "Using CPackDeb for packaging")
 
 	set(CPACK_INSTALL_PREFIX "/usr")
 	set(CPACK_GENERATOR ${CPACK_GENERATOR} TGZ STGZ DEB)
@@ -116,6 +122,7 @@ if (DEBIAN)
 	message(STATUS "[debian] Building for architecture: ${CPACK_DEBIAN_PACKAGE_ARCHITECTURE}")
 	#set (CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
 	set (CPACK_SYSTEM_NAME ${CPACK_DEBIAN_PACKAGE_ARCHITECTURE})
+    endif()
 endif()
 
 

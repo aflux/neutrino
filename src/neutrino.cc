@@ -706,7 +706,13 @@ vector <nPhysD *> neutrino::fileOpen(QString fname) {
     if (suffix=="neus") {
         imagelist=openSession(fname);
     } else {
-        imagelist=phys_open(fname.toUtf8().constData());
+        try {
+            imagelist=phys_open(fname.toUtf8().constData());
+        } catch (exception& e) {
+            QMessageBox dlg(QMessageBox::Critical, tr("Exception"), e.what());
+            dlg.setWindowFlags(dlg.windowFlags() | Qt::WindowStaysOnTopHint);
+            dlg.exec();
+        }
     }
     if (imagelist.size()==0) {
         // resta quasi solo QImage
