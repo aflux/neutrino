@@ -883,123 +883,121 @@ physDouble_tiff::physDouble_tiff(const char *ifilename)
         }
 
         if (config==PLANARCONFIG_CONTIG ) {
-            if (compression==COMPRESSION_NONE ) {
-                float resx=1.0, resy=1.0;
-                TIFFGetField(tif, TIFFTAG_XRESOLUTION, &resx);
-                TIFFGetField(tif, TIFFTAG_YRESOLUTION, &resy);
-                if (resx!=0.0 && resy!=0.0) {
-                    set_scale(resx,resy);
-                }
-                float posx=0.0, posy=0.0;
-                TIFFGetField(tif, TIFFTAG_XPOSITION, &posx);
-                TIFFGetField(tif, TIFFTAG_YPOSITION, &posy);
-                set_origin(posx,posy);
+            float resx=1.0, resy=1.0;
+            TIFFGetField(tif, TIFFTAG_XRESOLUTION, &resx);
+            TIFFGetField(tif, TIFFTAG_YRESOLUTION, &resy);
+            if (resx!=0.0 && resy!=0.0) {
+                set_scale(resx,resy);
+            }
+            float posx=0.0, posy=0.0;
+            TIFFGetField(tif, TIFFTAG_XPOSITION, &posx);
+            TIFFGetField(tif, TIFFTAG_YPOSITION, &posy);
+            set_origin(posx,posy);
 
-                char *docname=NULL;
-                if (TIFFGetField(tif, TIFFTAG_DOCUMENTNAME, &docname)) {
-                    setName(docname);
-                    DEBUG(docname);
-                }
-                char *neu_prop=NULL;
-                if (TIFFGetField(tif, TIFFTAG_NEUTRINO, &neu_prop)) {
-                    string str_desc=string(neu_prop);
-                    DEBUG(str_desc.size() << "\n" << str_desc);
-                    stringstream ss(str_desc);
-                    property.loader(ss);
-                    ss.str(str_desc);
-                }
-                char *desc=NULL;
-                if (TIFFGetField(tif, TIFFTAG_IMAGEDESCRIPTION, &desc)) {
-                    string str_desc=string(desc);
-                    DEBUG(str_desc.size() << "\n" << str_desc);
-                    stringstream ss(str_desc);
-                    vec2f display_range(0,0);
-                    string my_line;
-                    while (!(ss  >> my_line).fail()) {
-                        auto index = my_line.find('=');
-                        std::pair<std::string,std::string> keyVal;
-                        if (index != std::string::npos) {
-                            // Split around ':' character
-                            string left=my_line.substr(0,index);
-                            string right=my_line.substr(index+1);
-                            if (left=="ImageJ") {
-                                property["ImageJ-version"]=right;
-                            } else if (left=="min") {
-                                stringstream rightss(right);
-                                double val=0;
-                                rightss >> val;
-                                display_range.set_first(val);
-                            } else if (left=="max") {
-                                stringstream rightss(right);
-                                double val=0;
-                                rightss >> val;
-                                display_range.set_second(val);
-                            }
+            char *docname=NULL;
+            if (TIFFGetField(tif, TIFFTAG_DOCUMENTNAME, &docname)) {
+                setName(docname);
+                DEBUG(docname);
+            }
+            char *neu_prop=NULL;
+            if (TIFFGetField(tif, TIFFTAG_NEUTRINO, &neu_prop)) {
+                string str_desc=string(neu_prop);
+                DEBUG(str_desc.size() << "\n" << str_desc);
+                stringstream ss(str_desc);
+                property.loader(ss);
+                ss.str(str_desc);
+            }
+            char *desc=NULL;
+            if (TIFFGetField(tif, TIFFTAG_IMAGEDESCRIPTION, &desc)) {
+                string str_desc=string(desc);
+                DEBUG(str_desc.size() << "\n" << str_desc);
+                stringstream ss(str_desc);
+                vec2f display_range(0,0);
+                string my_line;
+                while (!(ss  >> my_line).fail()) {
+                    auto index = my_line.find('=');
+                    std::pair<std::string,std::string> keyVal;
+                    if (index != std::string::npos) {
+                        // Split around ':' character
+                        string left=my_line.substr(0,index);
+                        string right=my_line.substr(index+1);
+                        if (left=="ImageJ") {
+                            property["ImageJ-version"]=right;
+                        } else if (left=="min") {
+                            stringstream rightss(right);
+                            double val=0;
+                            rightss >> val;
+                            display_range.set_first(val);
+                        } else if (left=="max") {
+                            stringstream rightss(right);
+                            double val=0;
+                            rightss >> val;
+                            display_range.set_second(val);
                         }
                     }
-                    if (display_range != vec2f(0,0)) {
-                        property["display_range"] =display_range;
-                    }
                 }
-			
-                setFromName(ifilename);
-                unsigned short bytesperpixel=0;
-                TIFFGetField(tif, TIFFTAG_BITSPERSAMPLE, &bytesperpixel);
-                bytesperpixel/=8;
-                unsigned int w=0, h=0;
-                TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w);
-                TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h);
-                DEBUG("Width " << w << " Height " << h << " BYTESperPIXEL " << bytesperpixel);
+                if (display_range != vec2f(0,0)) {
+                    property["display_range"] =display_range;
+                }
+            }
 
-                if (w*h>0 && bytesperpixel>0 ) {
-                    tsize_t scanlineSize=TIFFScanlineSize(tif);
-                    tdata_t buf = _TIFFmalloc(scanlineSize);
-                    DEBUG("Buf allocated " << scanlineSize);
-                    resize(w,h);
-                    for (tiff_uint32 j = 0; j < h; j++) {
-                        TIFFReadScanline(tif, buf, j);
-                        for (tiff_uint32 i=0; i<w; i++) {
-                            double val=0;
-                            for (int k=0;k<samples;k++) {
-                                if (bytesperpixel == sizeof(char)) {
-                                    if (format==SAMPLEFORMAT_UINT) {
-                                        val+=((unsigned char*)buf)[i*samples];
-                                    } else if (format==SAMPLEFORMAT_INT) {
-                                        val+=((char*)buf)[i*samples];
-                                    }
-                                } else if (bytesperpixel == sizeof(short)) {
-                                    if (format==SAMPLEFORMAT_UINT) {
-                                        val+=((unsigned short*)buf)[i*samples];
-                                    } else if (format==SAMPLEFORMAT_INT) {
-                                        val+=((short*)buf)[i*samples];
-                                    }
-                                } else if (bytesperpixel == sizeof(int)) {
-                                    if (format==SAMPLEFORMAT_UINT) {
-                                        val+=((unsigned int*)buf)[i*samples];
-                                    } else if (format==SAMPLEFORMAT_INT) {
-                                        val+=((int*)buf)[i*samples];
-                                    } else if (format==SAMPLEFORMAT_IEEEFP) {
-                                        val+=((float*)buf)[i*samples];
-                                    }
-                                } else if (bytesperpixel == sizeof(double)) {
-                                    if (format==SAMPLEFORMAT_UINT) {
-                                        val+=((long unsigned int*)buf)[i*samples];
-                                    } else if (format==SAMPLEFORMAT_INT) {
-                                        val+=((long int*)buf)[i*samples];
-                                    } else if (format==SAMPLEFORMAT_IEEEFP) {
-                                        val+=((double*)buf)[i*samples];
-                                    }
+            setFromName(ifilename);
+            unsigned short bytesperpixel=0;
+            TIFFGetField(tif, TIFFTAG_BITSPERSAMPLE, &bytesperpixel);
+            bytesperpixel/=8;
+            unsigned int w=0, h=0;
+            TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w);
+            TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h);
+            DEBUG("Width " << w << " Height " << h << " BYTESperPIXEL " << bytesperpixel);
+
+            if (w*h>0 && bytesperpixel>0 ) {
+                tsize_t scanlineSize=TIFFScanlineSize(tif);
+                tdata_t buf = _TIFFmalloc(scanlineSize);
+                DEBUG("Buf allocated " << scanlineSize);
+                resize(w,h);
+                for (tiff_uint32 j = 0; j < h; j++) {
+                    TIFFReadScanline(tif, buf, j);
+                    for (tiff_uint32 i=0; i<w; i++) {
+                        double val=0;
+                        for (int k=0;k<samples;k++) {
+                            if (bytesperpixel == sizeof(char)) {
+                                if (format==SAMPLEFORMAT_UINT) {
+                                    val+=((unsigned char*)buf)[i*samples];
+                                } else if (format==SAMPLEFORMAT_INT) {
+                                    val+=((char*)buf)[i*samples];
+                                }
+                            } else if (bytesperpixel == sizeof(short)) {
+                                if (format==SAMPLEFORMAT_UINT) {
+                                    val+=((unsigned short*)buf)[i*samples];
+                                } else if (format==SAMPLEFORMAT_INT) {
+                                    val+=((short*)buf)[i*samples];
+                                }
+                            } else if (bytesperpixel == sizeof(int)) {
+                                if (format==SAMPLEFORMAT_UINT) {
+                                    val+=((unsigned int*)buf)[i*samples];
+                                } else if (format==SAMPLEFORMAT_INT) {
+                                    val+=((int*)buf)[i*samples];
+                                } else if (format==SAMPLEFORMAT_IEEEFP) {
+                                    val+=((float*)buf)[i*samples];
+                                }
+                            } else if (bytesperpixel == sizeof(double)) {
+                                if (format==SAMPLEFORMAT_UINT) {
+                                    val+=((long unsigned int*)buf)[i*samples];
+                                } else if (format==SAMPLEFORMAT_INT) {
+                                    val+=((long int*)buf)[i*samples];
+                                } else if (format==SAMPLEFORMAT_IEEEFP) {
+                                    val+=((double*)buf)[i*samples];
                                 }
                             }
-                            set(i,j,val/samples);
                         }
+                        set(i,j,val/samples);
                     }
-                    _TIFFfree(buf);
-                    TscanBrightness();
                 }
+                _TIFFfree(buf);
+                TscanBrightness();
             } else {
-                stringstream ss("TIFFTAG_COMPRESSION: ");
-                ss<<compression << " not supported";
+                stringstream ss("TIFFTAG_PLANARCONFIG: ");
+                ss << config << " not supported";
                 throw phys_fileerror(ss.str());
             }
 
