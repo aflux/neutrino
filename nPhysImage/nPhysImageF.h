@@ -455,10 +455,10 @@ public:
 		} else {		
 			double sina=sin(alpha);
 			double cosa=cos(alpha);
-			double dx1=((double)(getH()-1))*sina;
-			double dx2=((double)(getW()-1))*cosa;
+            double dx1=+((double)(getH()-1))*sina;
+            double dx2=+((double)(getW()-1))*cosa;
 			double dy1=-((double)(getW()-1))*sina;
-			double dy2=((double)(getH()-1))*cosa;
+            double dy2=+((double)(getH()-1))*cosa;
 
             rotated = new nPhysImageF<T> (fabs(dx1)+fabs(dx2)+1,fabs(dy1)+fabs(dy2)+1, def_value);
 			double shiftx=std::min(dx1,0.0)+std::min(dx2,0.0);

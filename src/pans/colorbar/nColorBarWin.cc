@@ -165,6 +165,8 @@ void nColorBarWin::bufferChanged(nPhysD *phys) {
 
 void nColorBarWin::updatecolorbar() {
     disconnect(palettes, SIGNAL(currentIndexChanged(QString)), nparent, SLOT(changeColorTable(QString)));
+    disconnect(my_w.sliderMin,SIGNAL(valueChanged(int)),this,SLOT(slider_min_changed(int)));
+    disconnect(my_w.sliderMax,SIGNAL(valueChanged(int)),this,SLOT(slider_max_changed(int)));
     palettes->clear();
     palettes->addItems(nparent->nPalettes.keys());
     palettes->setCurrentIndex(palettes->findText(nparent->colorTable));
@@ -172,11 +174,17 @@ void nColorBarWin::updatecolorbar() {
     if (currentBuffer) {
         vec2f minmax=currentBuffer->property["display_range"];
         my_w.lineMin->setText(QString::number(minmax.first()));
-        my_w.lineMax->setText(QString::number(minmax.second()));		
+        my_w.lineMax->setText(QString::number(minmax.second()));
+        double percentagemin=(minmax.first()-currentBuffer->get_min())/(currentBuffer->get_max()-currentBuffer->get_min());
+        my_w.sliderMin->setValue(percentagemin*my_w.sliderMin->maximum());
+        double percentagemax=(minmax.second()-currentBuffer->get_min())/(currentBuffer->get_max()-currentBuffer->get_min());
+        my_w.sliderMax->setValue(percentagemax*my_w.sliderMax->maximum());
     }
     
 	my_w.histogram->repaint();
     connect(palettes, SIGNAL(currentIndexChanged(QString)), nparent, SLOT(changeColorTable(QString)));
+    connect(my_w.sliderMin,SIGNAL(valueChanged(int)),this,SLOT(slider_min_changed(int)));
+    connect(my_w.sliderMax,SIGNAL(valueChanged(int)),this,SLOT(slider_max_changed(int)));
 }
 
 void nColorBarWin::slider_min_changed(int val)
