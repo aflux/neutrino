@@ -12,7 +12,6 @@ QList<neutrino*> NApplication::neus() {
 #endif
 
 bool NApplication::event(QEvent *ev) {
-    DEBUG("MAC APPLICATION EVENT " << ev->type());
     if (ev->type() == QEvent::FileOpen) {
         QWidget *widget = QApplication::activeWindow();
         neutrino *neu=qobject_cast<neutrino *>(widget);

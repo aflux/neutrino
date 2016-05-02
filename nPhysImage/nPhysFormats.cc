@@ -887,8 +887,19 @@ physDouble_tiff::physDouble_tiff(const char *ifilename)
             TIFFGetField(tif, TIFFTAG_XRESOLUTION, &resx);
             TIFFGetField(tif, TIFFTAG_YRESOLUTION, &resy);
             if (resx!=0.0 && resy!=0.0) {
-                set_scale(resx,resy);
+                set_scale(1.0/resx,1.0/resy);
             }
+            unsigned short units=0;
+            TIFFGetField(tif, TIFFTAG_RESOLUTIONUNIT, &units);
+            switch (units) {
+            case 1:
+                property["unitsX"]=property["unitsY"]="inch";
+                break;
+            case 2:
+                property["unitsX"]=property["unitsY"]="cm";
+                break;
+            }
+
             float posx=0.0, posy=0.0;
             TIFFGetField(tif, TIFFTAG_XPOSITION, &posx);
             TIFFGetField(tif, TIFFTAG_YPOSITION, &posy);
@@ -1022,7 +1033,7 @@ phys_write_tiff(nPhysImageF<double> *my_phys, const char * ofilename) {
 		TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, 1);
 		TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
 		TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 1);
-		TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
+        TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_LZW);
 		TIFFSetField(tif, TIFFTAG_SAMPLEFORMAT, SAMPLEFORMAT_IEEEFP);
  		TIFFSetField(tif, TIFFTAG_DOCUMENTNAME, my_phys->getName().c_str());
         stringstream prop_ss;
@@ -1044,9 +1055,9 @@ phys_write_tiff(nPhysImageF<double> *my_phys, const char * ofilename) {
 		TIFFSetField(tif, TIFFTAG_ROWSPERSTRIP, my_phys->getH());
 		TIFFSetField(tif, TIFFTAG_IMAGELENGTH, my_phys->getH());
 		float scalex=my_phys->get_scale().x();
- 		TIFFSetField(tif, TIFFTAG_XRESOLUTION, scalex);
+        TIFFSetField(tif, TIFFTAG_XRESOLUTION, 1.0/scalex);
 		float scaley=my_phys->get_scale().y();
- 		TIFFSetField(tif, TIFFTAG_YRESOLUTION, scaley);
+        TIFFSetField(tif, TIFFTAG_YRESOLUTION, 1.0/scaley);
 		float origx=my_phys->get_origin().x();
 		TIFFSetField(tif, TIFFTAG_XPOSITION, origx);
 		float origy=my_phys->get_origin().y();
