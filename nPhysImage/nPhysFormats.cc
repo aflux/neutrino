@@ -856,46 +856,34 @@ physDouble_tiff::physDouble_tiff(const char *ifilename)
 	TIFF* tif = TIFFOpen(ifilename, "r");
 	if (tif) {
         DEBUG("Opened");
-        unsigned short samples=1, compression, config, format,fillorder;
-		TIFFGetField(tif, TIFFTAG_SAMPLESPERPIXEL, &samples);
-		TIFFGetField(tif, TIFFTAG_COMPRESSION, &compression);
+        unsigned short config;
         TIFFGetField(tif, TIFFTAG_PLANARCONFIG, &config);
-
-        if (!TIFFGetField(tif, TIFFTAG_SAMPLEFORMAT, &format)) {
-            format=SAMPLEFORMAT_UINT;
-        }
-
-
-        TIFFGetField(tif, TIFFTAG_FILLORDER, &fillorder);
-
-		
-		DEBUG("COMPRESSION_NONE " << compression << " " << COMPRESSION_NONE);
-		DEBUG("PLANARCONFIG_CONTIG " << config << " " << PLANARCONFIG_CONTIG);
-        DEBUG("FORMAT " << format);
-        DEBUG("FILLORDER " << fillorder);
-        DEBUG("SAMPLES " << samples);
-        vector<unsigned short> extra(samples);
-        TIFFGetField(tif, TIFFTAG_EXTRASAMPLES, &extra[0]);
-        for (int k=0;k<samples;k++) {
-            stringstream ss("Tiff_extra");
-            ss<<k;
-            property[ss.str()]=extra[k];
-        }
-
         if (config==PLANARCONFIG_CONTIG ) {
+            unsigned short samples=1, compression, format, fillorder, units=0;
+            TIFFGetField(tif, TIFFTAG_SAMPLESPERPIXEL, &samples);
+            TIFFGetField(tif, TIFFTAG_COMPRESSION, &compression);
+
+            if (!TIFFGetField(tif, TIFFTAG_SAMPLEFORMAT, &format)) {
+                format=SAMPLEFORMAT_UINT;
+            }
+
+            TIFFGetField(tif, TIFFTAG_FILLORDER, &fillorder);
+
             float resx=1.0, resy=1.0;
             TIFFGetField(tif, TIFFTAG_XRESOLUTION, &resx);
             TIFFGetField(tif, TIFFTAG_YRESOLUTION, &resy);
             if (resx!=0.0 && resy!=0.0) {
                 set_scale(1.0/resx,1.0/resy);
             }
-            unsigned short units=0;
             TIFFGetField(tif, TIFFTAG_RESOLUTIONUNIT, &units);
             switch (units) {
             case 1:
-                property["unitsX"]=property["unitsY"]="inch";
+                property["unitsX"]=property["unitsY"]="?";
                 break;
             case 2:
+                property["unitsX"]=property["unitsY"]="in";
+                break;
+            case 3:
                 property["unitsX"]=property["unitsY"]="cm";
                 break;
             }
@@ -904,6 +892,27 @@ physDouble_tiff::physDouble_tiff(const char *ifilename)
             TIFFGetField(tif, TIFFTAG_XPOSITION, &posx);
             TIFFGetField(tif, TIFFTAG_YPOSITION, &posy);
             set_origin(posx,posy);
+
+
+            DEBUG("COMPRESSION_NONE " << compression << " " << COMPRESSION_NONE);
+            DEBUG("PLANARCONFIG_CONTIG " << config << " " << PLANARCONFIG_CONTIG);
+            DEBUG("FORMAT " << format);
+            DEBUG("FILLORDER " << fillorder);
+            DEBUG("SAMPLES " << samples);
+            DEBUG("UNITS " << units);
+            vector<unsigned short> extra(samples);
+            TIFFGetField(tif, TIFFTAG_EXTRASAMPLES, &extra[0]);
+            for (int k=0;k<samples;k++) {
+                stringstream ss;
+                ss << "Tiff_extra" << k;
+                property[ss.str()]=extra[k];
+            }
+            char *soft=NULL;
+            if (TIFFGetField(tif, TIFFTAG_SOFTWARE, &soft)) {
+                property["Software"]=string(soft);
+                DEBUG("TIFFTAG_SOFTWARE " << soft);
+            }
+
 
             char *docname=NULL;
             if (TIFFGetField(tif, TIFFTAG_DOCUMENTNAME, &docname)) {
@@ -1048,7 +1057,7 @@ phys_write_tiff(nPhysImageF<double> *my_phys, const char * ofilename) {
         DEBUG(description);
 
         TIFFSetField(tif, TIFFTAG_NEUTRINO, description.c_str());
- 		TIFFSetField(tif, TIFFTAG_SOFTWARE, "neutrino");
+        TIFFSetField(tif, TIFFTAG_SOFTWARE, "Neutrino");
         TIFFSetField(tif, TIFFTAG_COPYRIGHT, "http::/web.luli.polytchnique.fr/neutrino");
 
 		TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, my_phys->getW());
