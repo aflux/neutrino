@@ -427,9 +427,9 @@ void neutrino::flipLeftRight() {
     my_w.actionFlipRotate->setIcon(my_w.menuTransformation->defaultAction()->icon());
 }
 
-nPhysD* neutrino::getBuffer(int i) {
+nPhysD* neutrino::getBuffer(int i, bool returnCurrent) {
     if (i>=0 && i<physList.size()) return physList.at(i);
-    return currentBuffer;
+    return (returnCurrent?currentBuffer:nullptr);
 }
 
 // ------------------ PLUGINS -----------------------
@@ -995,7 +995,7 @@ nPhysD* neutrino::replacePhys(nPhysD* newPhys, nPhysD* oldPhys, bool show) { //T
 void neutrino::removePhys(nPhysD* datamatrix) {
     if (datamatrix) {
         emit physDel(datamatrix);
-        int position=physList.indexOf(datamatrix);
+        int position=indexOf(datamatrix);
         if (position != -1) {
             physList.removeAll(datamatrix);
             if (physList.size()>0) {
@@ -1095,7 +1095,7 @@ neutrino::showPhys(nPhysD* datamatrix) {
         }
 
         QString winName=QString::fromUtf8(datamatrix->getShortName().c_str());
-        winName.prepend(property("winId").toString()+QString(":")+QString::number(physList.indexOf(datamatrix))+QString(" "));
+        winName.prepend(property("winId").toString()+QString(":")+QString::number(indexOf(datamatrix))+QString(" "));
 
         QString mypath=QString::fromUtf8(datamatrix->getFromName().c_str());
         winName.append(QString(" ")+mypath);
@@ -1132,13 +1132,15 @@ neutrino::createQimage() {
 }
 
 void neutrino::exportGraphics () {
-    QString fout = QFileDialog::getSaveFileName(this,tr("Save Drawing"),property("fileExport").toString(),"Available formats (*.svg, *.pdf, *.png);; Any files (*)");
+    QString ftypes="SVG (*.svg);; PDF (*.PDF);; PNG (*.png);; Any files (*)";
+    QString fout = QFileDialog::getSaveFileName(this,tr("Save Drawing"),property("fileExport").toString(),ftypes);
     if (!fout.isEmpty())
         exportGraphics(fout);
 }
 
 void neutrino::exportAllGraphics () {
-    QString fout = QFileDialog::getSaveFileName(this,tr("Save All Drawings"),property("fileExport").toString(),"Available formats (*.svg, *.pdf, *.png);; Any files (*)");
+    QString ftypes="SVG (*.svg);; PDF (*.PDF);; PNG (*.png);; Any files (*)";
+    QString fout = QFileDialog::getSaveFileName(this,tr("Save All Drawings"),property("fileExport").toString(),ftypes);
     if (!fout.isEmpty()) {
         for (int i=0;i<physList.size() ; i++) {
             actionNextBuffer();
@@ -1397,12 +1399,12 @@ void neutrino::dropEvent(QDropEvent *e) {
 
 // switch buffers
 void neutrino::actionPrevBuffer() {
-    int position=physList.indexOf(currentBuffer);
+    int position=indexOf(currentBuffer);
     if (position>-1) showPhys(physList.at((position+physList.size()-1)%physList.size()));
 }
 
 void neutrino::actionNextBuffer() {
-    int position=physList.indexOf(currentBuffer);
+    int position=indexOf(currentBuffer);
     if (position>-1) showPhys(physList.at((position+1)%physList.size()));
 }
 

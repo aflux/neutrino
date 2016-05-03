@@ -909,11 +909,14 @@ physDouble_tiff::physDouble_tiff(const char *ifilename)
             }
             char *soft=NULL;
             if (TIFFGetField(tif, TIFFTAG_SOFTWARE, &soft)) {
-                property["Software"]=string(soft);
+                property["TIFF_Software"]=string(soft);
                 DEBUG("TIFFTAG_SOFTWARE " << soft);
             }
-
-
+            char *copyright=NULL;
+            if (TIFFGetField(tif, TIFFTAG_COPYRIGHT, &copyright)) {
+                property["TIFF_copyright"]=string(copyright);
+                DEBUG("TIFFTAG_COPYRIGHT " << copyright);
+            }
             char *docname=NULL;
             if (TIFFGetField(tif, TIFFTAG_DOCUMENTNAME, &docname)) {
                 setName(docname);

@@ -112,6 +112,8 @@ private:
 	QList<nPhysD*> physList;
 
 public slots:
+    inline int indexOf(nPhysD* my_phys){return physList.indexOf(my_phys);};
+
 	nGenericPan* existsPan(QString);
 
 	void build_colormap();
@@ -158,7 +160,7 @@ public slots:
 	void showPhys(nPhysD&);
 	void addShowPhys(nPhysD*);
 	void addShowPhys(nPhysD&);
-	nPhysD* getBuffer(int=-1);
+    nPhysD* getBuffer(int=-1,bool=true);
 
 	inline QList<nPhysD *> getBufferList() {return physList;};
     inline QList<nGenericPan*> getPanList() {return panList;};

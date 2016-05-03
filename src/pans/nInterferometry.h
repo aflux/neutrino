@@ -50,8 +50,6 @@ public:
 	QPointer<nLine> unwrapBarrier;
     QPointer<nLine> maskRegion;
 	
-	std::map<std::string, nPhysD *> waveletPhys[2];
-
     std::map<std::string, nPhysD *> localPhys;
 
     void loadSettings(QSettings *);
@@ -59,7 +57,7 @@ public:
     
 private:
 	wavelet_params my_params;
-    std::vector<std::string> localPhysNames();
+
     std::map<QToolButton*, nLine *> my_shapes;
     
 public slots:
@@ -73,7 +71,6 @@ public slots:
     
 	void guessCarrier();
 
-	void doTrash();
 	void doWavelet();
 	void doWavelet(int);
 	void doUnwrap();

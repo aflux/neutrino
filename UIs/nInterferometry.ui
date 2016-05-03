@@ -44,7 +44,7 @@
     <item>
      <widget class="QGroupBox" name="groupBox_2">
       <property name="title">
-       <string>Carrier</string>
+       <string>Main interfringe</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,1,1,0,0">
        <property name="leftMargin">
@@ -106,14 +106,14 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="QLabel" name="label">
+           <widget class="QLabel" name="label_2">
             <property name="font">
              <font>
               <pointsize>10</pointsize>
              </font>
             </property>
             <property name="text">
-             <string>Correlation:</string>
+             <string>Thickness:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -121,9 +121,9 @@
            </widget>
           </item>
           <item>
-           <widget class="QDoubleSpinBox" name="correlation">
+           <widget class="QDoubleSpinBox" name="thickness">
             <property name="toolTip">
-             <string>Correlation of fringes</string>
+             <string>Thickness of fringes</string>
             </property>
             <property name="suffix">
              <string/>
@@ -149,14 +149,14 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="label_2">
+           <widget class="QLabel" name="label">
             <property name="font">
              <font>
               <pointsize>10</pointsize>
              </font>
             </property>
             <property name="text">
-             <string>Thickness:</string>
+             <string>Correlation:</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -164,9 +164,9 @@
            </widget>
           </item>
           <item>
-           <widget class="QDoubleSpinBox" name="thickness">
+           <widget class="QDoubleSpinBox" name="correlation">
             <property name="toolTip">
-             <string>Thickness of fringes</string>
+             <string>Correlation of fringes</string>
             </property>
             <property name="suffix">
              <string/>
@@ -400,7 +400,7 @@
        </sizepolicy>
       </property>
       <property name="title">
-       <string>Zero phase point &amp;&amp; rotation</string>
+       <string>Zero point - sign - rotation</string>
       </property>
       <property name="checkable">
        <bool>false</bool>
@@ -949,11 +949,9 @@
    <addaction name="separator"/>
    <addaction name="actionRect"/>
    <addaction name="separator"/>
-   <addaction name="actionTrash"/>
-   <addaction name="actionDuplicate"/>
-   <addaction name="separator"/>
    <addaction name="actionDoWavelet"/>
    <addaction name="chained"/>
+   <addaction name="actionDuplicate"/>
   </widget>
   <action name="actionRect">
    <property name="icon">
@@ -1019,18 +1017,6 @@
     <string>Do workflow</string>
    </property>
   </action>
-  <action name="actionTrash">
-   <property name="icon">
-    <iconset resource="../../neutrino-build/src/icons.qrc">
-     <normaloff>:/icons/trash.png</normaloff>:/icons/trash.png</iconset>
-   </property>
-   <property name="text">
-    <string>trash</string>
-   </property>
-   <property name="toolTip">
-    <string>Trash old Files</string>
-   </property>
-  </action>
   <action name="actionDuplicate">
    <property name="icon">
     <iconset resource="../../neutrino-build/src/icons.qrc">
@@ -1049,8 +1035,6 @@
   <tabstop>angleCarrier</tabstop>
   <tabstop>weightCarrier</tabstop>
   <tabstop>doCarrier</tabstop>
-  <tabstop>correlation</tabstop>
-  <tabstop>thickness</tabstop>
   <tabstop>method</tabstop>
   <tabstop>useBarrier</tabstop>
   <tabstop>lineBarrier</tabstop>
