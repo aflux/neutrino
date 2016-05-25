@@ -71,7 +71,8 @@ int main(int argc, char **argv)
 
     PythonQt::init(PythonQt::IgnoreSiteModule|PythonQt::RedirectStdOut);
 
-    PythonQt_QtAll::init();
+    // .alex. probabilmente questo serve -- edit: con libreria completa sembra di no
+    //PythonQt_QtAll::init();
 
     PythonQt::self()->addDecorators(new nPhysPyWrapper());
     PythonQt::self()->registerCPPClass("nPhysD",NULL,"neutrino");

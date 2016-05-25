@@ -2,7 +2,7 @@
 #define __npython
 
 #include <PythonQt.h>
-#include <PythonQt_QtAll.h>
+//#include <PythonQt_QtAll.h>
 
 #include <QtGui>
 #include <QWidget>

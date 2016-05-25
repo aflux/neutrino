@@ -99,6 +99,12 @@ if (GENERATE_NHASH)
 
 endif()
 
+# pythonqt
+if (PYTHONQT_FOUND_COMPLETE)
+	include_directories(python)
+	list(APPEND SOURCES python/nPython.cc)
+endif()
+
 # write automatically the qrc file for icons
 set(ICONSDIR ${CMAKE_CURRENT_SOURCE_DIR}/../resources/icons)
 file(GLOB_RECURSE ICONS ${ICONSDIR}/*.png)

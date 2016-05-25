@@ -24,9 +24,10 @@ def mousemove(mm):
     x = mm.x()
     y = mm.y()
     pos_lbl.setText("x: "+repr(x)+" y: "+repr(y))
-    val = n1.getBuffer().get(x, y)
-    #val_lbl.setText("value: "+repr(val))
-    val_lbl.setText(repr(myth.thcount))
+    myb = neu.getBuffer()
+    val = myb.get(x, y)
+    val_lbl.setText("value: "+repr(val))
+    #val_lbl.setText(repr(myth.thcount))
 
 def buffer_changed():
     print "------------------------ buffer changed"
@@ -54,17 +55,17 @@ val_lbl = qt.QLabel(w)
 val_lbl.setText("(..)")
 box.addWidget(val_lbl)
 
-try:
-    n1
-except NameError:
-    n1=None
+#try:
+#    n1
+#except NameError:
+#    n1=None
+#
+#if (n1 == None) :
+#    n1 = neu
 
-if (n1 == None) :
-    n1 = neutrino(1)
 
-
-n1.connect('mouseAtMatrix(QPointF)', mousemove)
-n1.connect('bufferChanged(nPhysD *)', buffer_changed)
+neu.connect('mouseAtMatrix(QPointF)', mousemove)
+neu.connect('bufferChanged(nPhysD *)', buffer_changed)
 #img = n1.getPhys()
 
 

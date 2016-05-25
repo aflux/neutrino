@@ -10,8 +10,8 @@ import os
 
 nll = list()
 
-my_n1 = neutrino(1)
+my_n1 = neu
 
 for ii in np.arange(1,10):
-    nll.append(neutrino())
+    nll.append(my_n1.fileNew())
     nll[-1].showPhys(my_n1.getBuffer(1).blur(ii))
