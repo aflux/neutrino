@@ -2,7 +2,7 @@
 
 cmake_minimum_required (VERSION 3.0)
 
-project (Neutrino CXX)
+project (Neutrino CXX C)
 
 ### top level compile options
 
